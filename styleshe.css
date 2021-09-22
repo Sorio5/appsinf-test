@@ -1,0 +1,125 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+*{
+    margin:0;
+    padding: 0;
+    
+    box-sizing: border-box;
+    font-family: "Montserrat",sans-serif;
+}
+nav{
+    background: #222222;
+    padding: 10px 40px 10px 70px;
+    border: 1px solid #000;
+    border-left: none;
+    border-right: none;
+
+}
+
+nav ul{
+    display: flex;
+    list-style: none;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+}
+
+nav ul li.logo{
+    flex:1;
+    font-size:30px ;
+    font-weight: 700;
+    color: #cccccc;
+
+}
+nav ul li.accnt{
+    flex:1;
+}
+
+nav ul div.items{
+    padding: 0 25px;
+    display: inline-flex;
+}
+
+nav ul div.items a,input,span{
+    text-decoration: none;
+    font-size: 18px;
+    padding: 0 12px;
+    color: #919191;
+}
+nav ul div.items a:hover{
+    color: white;
+}
+nav ul .search-icon{
+    height: 40px;
+    width: 240px;
+    display: flex;
+    background:#f2f2f2;
+    border-radius: 5px;
+}
+nav ul .search-icon input {
+    height: 100%;
+    width: 200px;
+    border: none;
+    outline: none;
+    padding: 0 10px;
+    color:#000;
+    font-size: 16px;
+    border-radius: 5px 0 0 5px;
+
+}
+nav ul .search-icon .icon{
+    height: 100%;
+    width: 40px;
+    line-height: 40px;
+    text-align: center;
+    padding-top: 9px;
+    border: 1px solid #cccccc;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+}
+nav ul .search-icon .icon:hover{
+    background: #e6e6e6;
+}
+nav ul .search-icon .icon span{
+    color: #222222;
+    font-size:18px ;
+
+}
+@media screen and (max-width:1052px){
+    nav{
+        padding: 10px 40px 10px 40px;
+
+    }
+    nav ul li.logo{
+        display: none;
+    }
+    nav ul div.items{
+        flex: 4;
+    }
+}
+
+td{
+    border: 1px solid black;
+  
+}
+tr{
+height:25px;
+}
+table{
+    width:100%;
+
+}
+th{
+    color: #000;
+}
+
+#undernav{
+    background: white;
+}
+#log-in-user{
+    color: #e6e6e6;
+}
+section.logSign-In,section.rapporter{
+    padding:10px 40px 10px 40px;;
+}
