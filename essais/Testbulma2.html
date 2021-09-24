@@ -10,20 +10,20 @@
   </head>
   <body>
 
-    <nav class="navbar" role="navigation" aria-label="main navigation">
+    <nav class="navbar is-danger" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
           <a class="navbar-item" href="#">
             <h1 class="title is-2">Logo</h1>
           </a>
       
-          <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+          <a role="button" class="navbar-burger" id="burger" aria-label="menu" aria-expanded="false" data-target="nav-links">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
           </a>
         </div>
       
-        <div class="navbar-menu">
+        <div class="navbar-menu" id="nav-links">
           <div class="navbar-start">
             
       
@@ -102,11 +102,12 @@
             
             <div class="field">
                 <div class="control"> 
-                    <button class="button is-link">Envoyer</button>
+                    <button class="button is-success">Envoyer</button>
                 </div>
             </div>
         </div>
     </div>
   </section>
+  <script src="index.js"></script>
   </body>
 </html>
