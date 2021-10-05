@@ -3,7 +3,3 @@ main {
   margin-left: auto;
   margin-right: auto;
 }
-
-.column.is-7, .column.is-7-tablet {
-  width: 100%;
-}
