@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Page principal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+
+    <link rel="stylesheet" href="Bull.css">
+  </head>
+
+  <body>
+
+    <nav class="navbar is-danger" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="index.html">
+          <h1 class="title is-2">Logo</h1>
+        </a>
+
+        <a role="button" class="navbar-burger" id="burger" aria-label="menu" aria-expanded="false" data-target="nav-links">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="nav-links" class="navbar-menu">
+        <div class="navbar-start">
+
+
+
+        </div>
+
+        <div class="navbar-end">
+          <a class="navbar-item" href="index.html">
+            Acceuil
+          </a>
+          <a class="navbar-item" href="login.html">
+            Identification
+          </a>
+          <a class="navbar-item" href="new_incident.html">
+            Envoyer rapport
+          </a>
+
+          <div class="navbar-item">
+            <div class="field has-addons">
+              <p class="control">
+                <input class="input" type="text" placeholder="Rechercher">
+              </p>
+              <p class="control">
+                <button class="button">
+                  Search
+                </button>
+              </p>
+            </div>
+          </div>
+
+
+          <div class="navbar-item">
+            Nom d'utilisateur
+
+          </div>
+
+        </div>
+      </div>
+      </div>
+    </nav>
+    <nav class="level is-mobile">
+      <div class="level-left ml-4">
+        <p class="level-item">
+          <a class="link is-info" href="new_incident.html">Signaler un incident</a>
+        </p>
+      </div>
+      <div class="level-right mr-4">
+        <p class="level-item">
+          <label class="label">Date</label>
+        <p class="tag is-medium">
+          <script>
+          document.write(new Date().toLocaleDateString());
+
+          </script>
+        </p>
+        </p>
+      </div>
+    </nav>
+
+    <section class="section">
+      <div class="container">
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth is-fullheight">
+          <thead>
+            <th>Description</th>
+            <th>Adresse</th>
+            <th>Rapporté par</th>
+            <th>Date</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>. </td>
+              <td>. </td>
+              <td>. </td>
+              <td>. </td>
+            </tr>
+            <tr>
+              <td>. </td>
+              <td>. </td>
+              <td>. </td>
+              <td>. </td>
+            </tr>
+            <tr>
+              <td>. </td>
+              <td>. </td>
+              <td>. </td>
+              <td>. </td>
+            </tr>
+            <tr>
+              <td>. </td>
+              <td>. </td>
+              <td>. </td>
+              <td>. </td>
+            </tr>
+            <tr>
+              <td>. </td>
+              <td>. </td>
+              <td>. </td>
+              <td>. </td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+    </section>
+    <script src="../js/index.js"></script>
+  </body>
+
+</html>
