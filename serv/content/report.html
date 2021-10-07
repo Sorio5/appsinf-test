@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Création d'un incident</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="Bull.css">
+  </head>
+  <body>
+
+    <nav class="navbar is-danger" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="index.html">
+            <h1 class="title is-2">Logo</h1>
+          </a>
+      
+          <a role="button" class="navbar-burger" id="burger" aria-label="menu" aria-expanded="false" data-target="nav-links">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+      
+        <div class="navbar-menu" id="nav-links">
+          <div class="navbar-start">
+            
+      
+            
+          </div>
+      
+          <div class="navbar-end">
+            <a class="navbar-item" href="index.html">
+                Accueil
+            </a>  
+            <a class="navbar-item" href="login.html">
+                Identification
+            </a> 
+            <a class="navbar-item" href="report.html">
+                Envoyer rapport
+            </a>
+             
+            <div class="navbar-item" >
+                <div class="field has-addons">
+                    <p class="control">
+                      <input class="input" type="text" placeholder="Rechercher">
+                    </p>
+                    <p class="control">
+                      <button class="button">
+                        Search
+                      </button>
+                    </p>
+                  </div>
+            </div>
+            
+                
+            <div class="navbar-item">
+                Nom d'utilisateur
+
+            </div>
+              
+            </div>
+          </div>
+        </div>
+      </nav>
+
+
+  <section class="section">
+    <div class="columns ">
+        <div class="column is-7">
+
+            <div class="field">
+                <label class="label">Description</label>
+                <div class="control">
+                    <textarea class="textarea" placeholder=""></textarea>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Adresse</label>
+                <div class="control">
+                    <input class="input" type="text">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="file">
+                    <label class="file-label">
+                      <input class="file-input" type="file">
+                      <span class="file-cta">
+                        <span class="file-icon">
+                          <i class="fa fa-upload"></i>
+                        </span>
+                        <span class="file-label">
+                          Choose a file…
+                        </span>
+                      </span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="field">
+                <div class="control"> 
+                    <button class="button is-success">Envoyer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+  <script src="index.js"></script>
+  </body>
+</html>

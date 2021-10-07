@@ -1,0 +1,10 @@
+{
+  "name": "serv",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+  },
+  "author": "nabil",
+  "license": "ISC",
+  "private" : "true"
+}
