@@ -1,12 +1,15 @@
 /**
  * File: server.js
  * @author Theo Technicguy
- * @version 0.0.1
+ * @version 0.0.2
  */
 
 // Setup server
+const path = require("path");
+
 const express = require("express");
 const consolidate = require("consolidate");
+
 const app = express();
 
 // By default, express sets a tag `X-Powered-By`. Disable this
@@ -14,11 +17,21 @@ app.disable("x-powered-by");
 
 // Set rendering engine and views
 app.engine("html", consolidate.hogan);
-app.set("views", "html");
+app.set("views", "views");
+// Set public assets folder
+app.use(express.static(path.join(__dirname, 'public/')));
 
 // Set available sites
 app.get(["/", "/index", "/index.html"], (req, res) => {
-    res.render("index.html");
+    let user_param;
+    // Make user_param empty if no user is supplied.
+    if (req.query.user == null) {
+        user_param = {};
+    } else {
+        user_param = {"user": {"name": req.query.user}};
+    }
+
+    res.render("index.html", user_param);
 });
 
 app.get("/login", (req, res) => {
