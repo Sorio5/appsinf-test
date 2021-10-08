@@ -1,0 +1,22 @@
+{
+  "author": "dafquers Sorio5 TheoTechnicguy",
+  "bugs": {
+    "url": "https://github.com/Sorio5/appsinf-test/issues"
+  },
+  "dependencies": {
+    "consolidate": "^0.16.0",
+    "express": "^4.17.1",
+    "hogan": "^1.0.2"
+  },
+  "description": "UCL CS project",
+  "homepage": "https://github.com/Sorio5/appsinf-test#readme",
+  "license": "Unknown",
+  "name": "appsinf",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sorio5/appsinf-test.git"
+  },
+  "scripts": {},
+  "version": "0.0.1"
+}
