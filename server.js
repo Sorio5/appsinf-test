@@ -1,7 +1,7 @@
 /**
  * File: server.js
- * @author Theo Technicguy
- * @version 0.0.2
+ * @author Theo Technicguy, Sorio
+ * @version 0.0.3
  */
 
 // Setup server
@@ -39,7 +39,14 @@ app.get("/login", (req, res) => {
 });
 
 app.get(["/report", "/new_incident"], (req, res) => {
-    res.render("new_incident.html");
+    let user_param;
+    // Make user_param empty if no user is supplied.
+    if (req.query.user == null) {
+        user_param = {};
+    } else {
+        user_param = {"user": {"name": req.query.user}};
+    }
+    res.render("new_incident.html",user_param);
 });
 
 app.use(express.static("content"));

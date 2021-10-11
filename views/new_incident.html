@@ -34,7 +34,7 @@
 
         <div class="navbar-end">
             <a class="navbar-item" href="/">Accueil</a>
-            <a class="navbar-item" href="/login">Identification</a>
+            
             <a class="navbar-item" href="/report">Envoyer rapport</a>
 
           <div class="navbar-item">
@@ -51,9 +51,13 @@
           </div>
 
 
-          <div class="navbar-item">
-            Nom d'utilisateur
-
+          <div class="navbar-item has-text-centered pr-5">
+            {{#user}}
+              Bonjour<br />{{name}}
+            {{/user}}
+            {{^user}}
+              <a class="navbar-item" href="/login">Se connecter</a>
+            {{/user}}
           </div>
 
         </div>
