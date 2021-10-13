@@ -134,4 +134,6 @@ personal/
 # General ignore
 *-ign.*
 
+# Mongodb
+db/
 # --- End Std ignores ---
