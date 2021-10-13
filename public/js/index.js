@@ -1,7 +1,12 @@
-//mobile menu
-const burgerIcon = document.querySelector('#burger');
-const navbarMenu = document.querySelector('#nav-links');
+/**
+ * File: index.js
+ * @author: Theo Technicgy
+ * @version: 0.1.0
+ *
+ * JavaScript extension for index.html
+ */
 
-burgerIcon.addEventListener('click',()=> {
-    navbarMenu.classList.toggle('is-active')
-});
+
+// Date setter
+var dt = new Date();
+document.getElementById("spanDate").innerHTML = dt.toLocaleDateString();
