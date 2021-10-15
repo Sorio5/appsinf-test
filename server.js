@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.0.3
+ * @version 0.1.0
  */
 
 // Setup server
@@ -9,8 +9,9 @@ const path = require("path");
 
 const express = require("express");
 const consolidate = require("consolidate");
-
+const mongo = require("mongodb").MongoClient;
 const app = express();
+const url = "mongodb://localhost:27017/";
 
 // By default, express sets a tag `X-Powered-By`. Disable this
 app.disable("x-powered-by");
@@ -21,8 +22,7 @@ app.set("views", "views");
 // Set public assets folder
 app.use(express.static(path.join(__dirname, 'public/')));
 
-// Set available sites
-app.get(["/", "/index", "/index.html"], (req, res) => {
+app.get(["/", "/index", "/index.html"],(req,res,next)=>{
     let user_param;
     // Make user_param empty if no user is supplied.
     if (req.query.user == null) {
@@ -30,8 +30,15 @@ app.get(["/", "/index", "/index.html"], (req, res) => {
     } else {
         user_param = {"user": {"name": req.query.user}};
     }
-
-    res.render("index.html", user_param);
+    mongo.connect(url,(err,client)=>{
+        if (err) throw err;
+        var dbo = client.db("users");
+        dbo.collection("incidents").findOne({}, function(err, result) {
+          if (err) throw err;
+          res.render("index.html",{result,user_param});
+          client.close();
+        });
+      });
 });
 
 app.get("/login", (req, res) => {
