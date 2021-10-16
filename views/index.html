@@ -86,15 +86,17 @@
             <th>Date</th>
           </thead>
           <tbody>
+            {{#result}}
             <tr>
-              {{#result}}
+              
               <td> {{description}} </td>
               <td>{{adresse}}</td>
               <td>{{author}}</td>
               <td>{{date}}</td>
-              {{/result}}
+              
 
             </tr>
+            {{/result}}
           </tbody>
 
         </table>

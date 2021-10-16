@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.1.0
+ * @version 0.1.1
  */
 
 // Setup server
@@ -12,6 +12,9 @@ const consolidate = require("consolidate");
 const mongo = require("mongodb").MongoClient;
 const app = express();
 const url = "mongodb://localhost:27017/";
+app.use(express.urlencoded({
+    extended: true
+  }));
 
 // By default, express sets a tag `X-Powered-By`. Disable this
 app.disable("x-powered-by");
@@ -33,11 +36,11 @@ app.get(["/", "/index", "/index.html"],(req,res,next)=>{
     mongo.connect(url,(err,client)=>{
         if (err) throw err;
         var dbo = client.db("users");
-        dbo.collection("incidents").findOne({}, function(err, result) {
-          if (err) throw err;
-          res.render("index.html",{result,user_param});
-          client.close();
-        });
+        dbo.collection("incidents").find({}).toArray((err, result) => {
+                if (err)throw err;
+                res.render("index.html", { result, user_param });
+                client.close();
+            });
       });
 });
 
@@ -56,5 +59,26 @@ app.get(["/report", "/new_incident"], (req, res) => {
     res.render("new_incident.html",user_param);
 });
 
+app.post("/insert",(req,res)=>{
+    let user_param="utilisateur";
+    var item ={
+        description: req.body.description,
+        adresse: req.body.adresse,
+        date :new Date().toLocaleDateString() ,
+        author:user_param
+    };
+
+    mongo.connect(url,(err,client)=>{
+        if (err) throw err;
+        var dbo = client.db("users");
+        dbo.collection("incidents").insertOne(item, function(err, result) {
+          if (err) throw err;
+          console.log(item);
+          client.close();
+        });
+      });
+    
+      res.redirect('/')
+});
 app.use(express.static("content"));
 app.listen(8080);
