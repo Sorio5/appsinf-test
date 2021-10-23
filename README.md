@@ -14,10 +14,11 @@ npm install
 ```
 
 ## Running FixMyPath
-To run the website, execute the following command in a shell.
+To run the website, first make sure you have an active instance of the Mongo server, then execute the following command in a shell.
 ```shell
 node ./server.js
 ```
+This will run the server with default configuration. If you want to change settings, duplicate `config.dist.json` to `config.json` or edit the last one directly.
 
 ## Credits
 Thanks to
