@@ -49,12 +49,12 @@
 
 
           <div class="navbar-item has-text-centered pr-5">
-            {{#user}}
+            {{#user_param.user}}
               Bonjour<br />{{name}}
-            {{/user}}
-            {{^user}}
+            {{/user_param.user}}
+            {{^user_param.user}}
               <a class="navbar-item" href="/login">Se connecter</a>
-            {{/user}}
+            {{/user_param.user}}
           </div>
 
         </div>
