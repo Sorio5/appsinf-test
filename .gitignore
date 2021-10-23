@@ -3,7 +3,7 @@
 # Extended from GitHub standard ignores for node
 # Interpreter: git
 # Ext: .gitignore
-# Version: 1.0.0
+# Version: 1.0.1
 # ------------------------------
 
 # Logs
@@ -110,30 +110,13 @@ dist
 
 # TernJS port file
 .tern-port
-
-# Config file
-*.cfg
-!.dist.cfg
-
-# Keys and authentication
-*.auth
-*.key
-
-# Archives
-*.zip
-*.7z
-*.tar*
-*.rar
-
-# *Personal* files
-personal/
-
-# SQLite databases
-*.sqlite
-
-# General ignore
-*-ign.*
+# --- End Std ignores ---
 
 # Mongodb
 db/
-# --- End Std ignores ---
+
+# IntelliJ files
+.idea/
+
+# NPM package lock
+package-lock.json
