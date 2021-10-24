@@ -1,7 +1,7 @@
 /**
  * File: db/mongoConnector.js
  * @author Theo Technicguy
- * @version 0.0.1
+ * @version 0.0.2
  *
  * This module manages database connections.
  * Inspired by the CodeWe Project's MongoDB module - MIT License
@@ -94,8 +94,8 @@ class MongoConnector {
             "display_name": data.display_name,
             "email": data.email,
             "password": data.password,
-            "creation_date": new Date.now(),
-            "last_visit": new Date.now()
+            "creation_date": Date.now(),
+            "last_visit": Date.now()
         };
 
         // Insert User

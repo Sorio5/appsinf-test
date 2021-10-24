@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.1.5
+ * @version 0.1.6
  */
 
 // Imports and modules
@@ -68,7 +68,12 @@ app.get(["/", "/index", "/index.html"], (req, res) => {
     });
 });
 
-app.post("/ident", async (req, res) => {
+/**
+ * Login confirmation page
+ * @method post
+ * @path /login
+ */
+app.post("/login", async (req, res) => {
     // Filter out incomplete responses
     if (!req.body.username || !req.body.password) {
         // TODO: Send error feedback.
@@ -106,6 +111,57 @@ app.post("/ident", async (req, res) => {
         // TODO: Send error feedback.
         res.redirect("/login");
     }
+});
+
+/**
+ * Enrollment registration page
+ * @method post
+ * @path /register
+ */
+app.post("/register", async (req, res) => {
+    const body = req.body;
+
+    // Check if all fields are filled
+    if (!body.username || !body.display_name || !body.email || !body.password || !body.password2) {
+        // TODO: Send error feedback
+        res.redirect("/login");
+        return;
+    }
+
+    // Check if user already exists
+    // Usernames have to be unique.
+    if (await db.getUser(body.username)) {
+        // TODO: Send error feedback
+        res.redirect("/login");
+        return;
+    }
+
+    // Validate email
+    const emailRE = /[A-Za-z0-9._+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/
+    if (!emailRE.test(body.email)) {
+        // TODO: Send error feedback
+        res.redirect("/login");
+        return;
+    }
+
+    // Check that passwords are equal
+    if (body.password !== body.password2) {
+        // TODO: Send error feedback
+        res.redirect("/login");
+        return;
+    }
+
+    // Create data structure to transmit
+    const data = {
+        "username": body.username,
+        "display_name": body.display_name,
+        "email": body.email,
+        "password": crypto.createHash("sha256").update(body.password).update(SALT).digest("hex")
+    };
+
+    await db.createUser(data);
+
+    res.redirect("/login");
 });
 
 app.get("/login", (req, res) => {

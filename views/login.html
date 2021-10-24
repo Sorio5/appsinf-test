@@ -53,7 +53,7 @@
     <main class="section text-center">
       <div class="columns">
         <div class="column">
-          <form class="box" action="/ident" method="post">
+          <form class="box" action="/login" method="post">
             <h1 class="title is-4">Se connecter</h1>
             <div class="field">
               <p class="control has-icons-left">
@@ -77,11 +77,11 @@
               </p>
             </div>
           </form>
-          <form class="box">
+          <form class="box" action="/register" method="post">
             <h1 class="title is-4">Créer un Compte</h1>
             <div class="field">
               <p class="control has-icons-left">
-                <input class="input" type="text" placeholder="Nom d'utilisateur">
+                <input class="input" type="text" placeholder="Nom d'utilisateur" name="username">
                 <span class="icon is-small is-left">
                   <i class="fa fa-user"></i>
                 </span>
@@ -89,7 +89,7 @@
             </div>
             <div class="field">
               <p class="control has-icons-left">
-                <input class="input" type="name" placeholder="Nom complet">
+                <input class="input" type="name" placeholder="Nom complet" name="display_name">
                 <span class="icon is-small is-left">
                   <i class="fa fa-address-card"></i>
                 </span>
@@ -97,7 +97,7 @@
             </div>
             <div class="field">
               <p class="control has-icons-left">
-                <input class="input" type="email" placeholder="Adresse mail">
+                <input class="input" type="email" placeholder="Adresse mail" name="email">
                 <span class="icon is-small is-left">
                   <i class="fa fa-envelope"></i>
                 </span>
@@ -105,7 +105,7 @@
             </div>
             <div class="field">
               <p class="control has-icons-left">
-                <input class="input" type="password" placeholder="Mot de passe">
+                <input class="input" type="password" placeholder="Mot de passe" name="password">
                 <span class="icon is-small is-left">
                   <i class="fa fa-lock"></i>
                 </span>
@@ -113,7 +113,7 @@
             </div>
             <div class="field">
               <p class="control has-icons-left">
-                <input class="input" type="password" placeholder="Répétez le mot de passe">
+                <input class="input" type="password" placeholder="Répétez le mot de passe" name="password2">
                 <span class="icon is-small is-left">
                   <i class="fa fa-lock"></i>
                 </span>
