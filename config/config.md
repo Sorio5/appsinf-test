@@ -9,3 +9,5 @@ This option sets the host. Can be any domain name or IP address. Default is `loc
 This option sets the MongoDB URL to use when connecting to the database. It should have the format of `mongodb://user:password@host:port/options`. Default is `mongodb://localhost:27017/`.
 - `SECRET`
 This option sets the server sessions secret. The secret is generated automagically at config creation though the server. Default is `null`.
+- `SALT`
+This option sets the password salt. It is generated automagically at config creation through the server. **Be careful when changing this as this will invalidate current passwords**. Default is `null`.

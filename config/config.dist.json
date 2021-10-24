@@ -2,5 +2,6 @@
   "PORT": 8080,
   "HOST": "localhost",
   "DB_URL": "mongodb://localhost:27017/",
-  "SECRET": null
+  "SECRET": null,
+  "SALT": null
 }
