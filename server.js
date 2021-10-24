@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.1.3
+ * @version 0.1.4
  */
 
 // Imports and modules
@@ -67,13 +67,28 @@ app.get(["/", "/index", "/index.html"], (req, res) => {
     });
 });
 
-app.post("/loginn",(req,res)=>{
-    if(req.body.username){
-        req.session.username=req.body.username;
-        res.redirect('/report');
+app.post("/ident", (req, res) => {
+    // Filter out incomplete responses
+    if (!req.body.username || !req.body.password) {
+        // TODO: Send error feedback.
+        res.redirect("/login");
+
+        // Break out of function
+        return;
     }
-    else{
-        res.redirect('/login');
+
+    // Hash password with salt
+    // We use SHA-2 as SHA-1 is getting phased out.
+    let password = crypto.createHash("sha256").update(req.body.password).update(SALT).digest("hex");
+    let username = req.body.username
+
+
+    if (username === "me" && password === crypto.createHash("sha256").update("secret").update(SALT).digest("hex")) {
+        req.session.username = username;
+        res.redirect("/report");
+    } else {
+        // TODO: Send error feedback.
+        res.redirect("/login");
     }
 });
 
