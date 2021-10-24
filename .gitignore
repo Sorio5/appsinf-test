@@ -3,7 +3,7 @@
 # Extended from GitHub standard ignores for node
 # Interpreter: git
 # Ext: .gitignore
-# Version: 1.0.2
+# Version: 1.0.3
 # ------------------------------
 
 # Logs
@@ -113,7 +113,12 @@ dist
 # --- End Std ignores ---
 
 # Mongodb
-db/
+*.wt
+*.lock
+*.bson
+WiredTiger*
+journal/
+diagnostic.data/
 
 # IntelliJ files
 .idea/

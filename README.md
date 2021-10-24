@@ -23,4 +23,5 @@ This will run the server with default configuration. If you want to change setti
 ## Credits
 Thanks to
 - Every node package author - check each package for respective licensing
+- the [CodeWe Project](https://github.com/CodeWe-projet/CodeWe) for their MongoDB connector file - MIT License
 - [Bulma](https://bulma.io) for their Cascading Style Sheets - MIT License
