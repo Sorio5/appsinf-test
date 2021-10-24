@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.1.4
+ * @version 0.1.5
  */
 
 // Imports and modules
@@ -17,6 +17,7 @@ const req = require("express/lib/request");
 const crypto = require("crypto");
 
 const config = require("./config/config");
+const db = require("./db/mongoConnector");
 
 // --- Config ---
 const HOST = config.HOST;
@@ -67,7 +68,7 @@ app.get(["/", "/index", "/index.html"], (req, res) => {
     });
 });
 
-app.post("/ident", (req, res) => {
+app.post("/ident", async (req, res) => {
     // Filter out incomplete responses
     if (!req.body.username || !req.body.password) {
         // TODO: Send error feedback.
@@ -77,14 +78,29 @@ app.post("/ident", (req, res) => {
         return;
     }
 
+    // Ease username access
+    const username = req.body.username;
+    // Get username from database
+    const user = (await db.getUser(username));
+    // Check if username exists
+    if (!user) {
+        res.redirect("/login");
+        return;
+    }
+
     // Hash password with salt
     // We use SHA-2 as SHA-1 is getting phased out.
     let password = crypto.createHash("sha256").update(req.body.password).update(SALT).digest("hex");
-    let username = req.body.username
 
+    if (password === user.password) {
+        // Now the user is authenticated.
+        // Prefer user.username over req.body.username, even if they are equal, as the first one is our data
+        // Update last login time
+        await db.updateLastVisit(user.username);
 
-    if (username === "me" && password === crypto.createHash("sha256").update("secret").update(SALT).digest("hex")) {
-        req.session.username = username;
+        // Set session cookie
+        req.session.username = user.username;
+        // Redirect.
         res.redirect("/report");
     } else {
         // TODO: Send error feedback.
