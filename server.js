@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.1.6
+ * @version 0.1.7
  */
 
 // Imports and modules
@@ -14,16 +14,14 @@ const fs = require('fs');
 const session = require('express-session');
 const req = require("express/lib/request");
 
-const crypto = require("crypto");
-
 const config = require("./config/config");
 const db = require("./db/mongoConnector");
+const utils = require("./utils");
 
 // --- Config ---
 const HOST = config.HOST;
 const PORT = config.PORT;
 const SECRET = config.SECRET;
-const SALT = config.SALT;
 
 // --- Setup server ---
 const app = express();
@@ -95,7 +93,7 @@ app.post("/login", async (req, res) => {
 
     // Hash password with salt
     // We use SHA-2 as SHA-1 is getting phased out.
-    let password = crypto.createHash("sha256").update(req.body.password).update(SALT).digest("hex");
+    let password = utils.hash(req.body.password);
 
     if (password === user.password) {
         // Now the user is authenticated.
@@ -156,7 +154,7 @@ app.post("/register", async (req, res) => {
         "username": body.username,
         "display_name": body.display_name,
         "email": body.email,
-        "password": crypto.createHash("sha256").update(body.password).update(SALT).digest("hex")
+        "password": utils.hash(body.password)
     };
 
     await db.createUser(data);
