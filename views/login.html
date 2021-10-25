@@ -1,134 +1,116 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="fr">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Identification</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../css/master.css">
-    <link rel="stylesheet" href="../css/login.css">
+      <meta charset="utf-8">
+      <meta content="width=device-width, initial-scale=1" name="viewport">
+      <title>Identification</title>
+      <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" rel="stylesheet">
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+      <link href="/css/master.css" rel="stylesheet">
+      <link href="/css/login.css" rel="stylesheet">
   </head>
 
   <body>
-    <nav class="navbar is-danger" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-          <h1 class="title is-2">Logo</h1>
-        </a>
+    <nav aria-label="main navigation" class="navbar is-danger" role="navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+                <h1 class="title is-2">Logo</h1>
+            </a>
 
-        <a role="button" class="navbar-burger" id="burger" aria-label="menu" aria-expanded="false" data-target="nav-links">
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
-      </div>
-
-      <div class="navbar-menu" id="nav-links">
-        <div class="navbar-end">
-          <a class="navbar-item" href="/">Accueil</a>
-    
-          <a class="navbar-item" href="/report">Envoyer rapport</a>
-
-          <div class="navbar-item">
-            <div class="field has-addons">
-              <p class="control">
-                <input class="input" type="text" placeholder="Rechercher" />
-              </p>
-              <p class="control">
-                <button class="button">
-                  Search
-                </button>
-              </p>
-            </div>
-          </div>
-          <div class="navbar-item">
-            
-          </div>
+            <a aria-expanded="false" aria-label="menu" class="navbar-burger" data-target="nav-links" id="burger"
+               role="button">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
         </div>
-      </div>
+
+        <div class="navbar-menu" id="nav-links">
+            <div class="navbar-end">
+                <a class="navbar-item" href="/">Accueil</a>
+                <a class="navbar-item" href="/report">Envoyer rapport</a>
+
+                <div class="navbar-item">
+                    <div class="field has-addons">
+                        <p class="control">
+                            <input class="input" placeholder="Rechercher" type="text"/>
+                        </p>
+                        <p class="control">
+                            <button class="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </nav>
 
     <main class="section text-center">
-      <div class="columns">
-        <div class="column">
-          <form class="box" action="/login" method="post">
-            <h1 class="title is-4">Se connecter</h1>
-            <div class="field">
-              <p class="control has-icons-left">
-                <input class="input" type="text" placeholder="Nom d'utilisateur" name="username">
-                <span class="icon is-small is-left">
-                  <i class="fa fa-user"></i>
-                </span>
-              </p>
-            </div>
-            <div class="field">
-              <p class="control has-icons-left">
-                <input class="input" type="password" placeholder="Mot de passe" name="password">
-                <span class="icon is-small is-left">
-                  <i class="fa fa-lock"></i>
-                </span>
-              </p>
-            </div>
-            <div class="field">
-              <p class="control">
-                <button class="button is-success">S'identifier</button>
-              </p>
-            </div>
-          </form>
-          <form class="box" action="/register" method="post">
-            <h1 class="title is-4">Créer un Compte</h1>
-            <div class="field">
-              <p class="control has-icons-left">
-                <input class="input" type="text" placeholder="Nom d'utilisateur" name="username">
-                <span class="icon is-small is-left">
-                  <i class="fa fa-user"></i>
-                </span>
-              </p>
-            </div>
-            <div class="field">
-              <p class="control has-icons-left">
-                <input class="input" type="name" placeholder="Nom complet" name="display_name">
-                <span class="icon is-small is-left">
-                  <i class="fa fa-address-card"></i>
-                </span>
-              </p>
-            </div>
-            <div class="field">
-              <p class="control has-icons-left">
-                <input class="input" type="email" placeholder="Adresse mail" name="email">
-                <span class="icon is-small is-left">
-                  <i class="fa fa-envelope"></i>
-                </span>
-              </p>
-            </div>
-            <div class="field">
-              <p class="control has-icons-left">
-                <input class="input" type="password" placeholder="Mot de passe" name="password">
-                <span class="icon is-small is-left">
-                  <i class="fa fa-lock"></i>
-                </span>
-              </p>
-            </div>
-            <div class="field">
-              <p class="control has-icons-left">
-                <input class="input" type="password" placeholder="Répétez le mot de passe" name="password2">
-                <span class="icon is-small is-left">
-                  <i class="fa fa-lock"></i>
-                </span>
-              </p>
-            </div>
-            <div class="field">
-              <p class="control">
-                <button class="button is-success">S'enregistrer</button>
-              </p>
-            </div>
-          </form>
-        </div>
-      </div>
-    </main>
-    <script src="/js/master.js"></script>
-  </body>
+        <div class="columns">
+            <div class="column">
+                <form action="/login" class="box" method="post">
+                    <h1 class="title is-4">Se connecter</h1>
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <input class="input" name="username" placeholder="Nom d'utilisateur" type="text">
+                            <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <input class="input" name="password" placeholder="Mot de passe" type="password">
+                             <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control">
+                            <button class="button is-success">S'identifier</button>
+                        </p>
+                    </div>
+                </form>
 
+                <form action="/register" class="box" method="post">
+                    <h1 class="title is-4">Créer un Compte</h1>
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <input class="input" name="username" placeholder="Nom d'utilisateur" type="text">
+                            <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <input class="input" name="display_name" placeholder="Nom complet" type="name">
+                            <span class="icon is-small is-left"><i class="fa fa-address-card"></i></span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <input class="input" name="email" placeholder="Adresse mail" type="email">
+                            <span class="icon is-small is-left"><i class="fa fa-envelope"></i></span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <input class="input" name="password" placeholder="Mot de passe" type="password">
+                            <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <input class="input" name="password2" placeholder="Répétez le mot de passe" type="password">
+                            <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control">
+                            <button class="button is-success">S'enregistrer</button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/master.js"></script>
+    <script src="/js/login.js"></script>
+  </body>
 </html>

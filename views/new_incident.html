@@ -1,114 +1,102 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="fr">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Création d'un incident</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <meta charset="utf-8">
+      <meta content="width=device-width, initial-scale=1" name="viewport">
+      <title>Création d'un incident</title>
+      <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" rel="stylesheet">
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+      <link href="/css/master.css" rel="stylesheet">
+      <link href="/css/new_incident.css" rel="stylesheet">
   </head>
 
   <body>
+      <nav aria-label="main navigation" class="navbar is-danger" role="navigation">
+          <div class="navbar-brand">
+              <a class="navbar-item" href="/">
+                  <h1 class="title is-2">Logo</h1>
+              </a>
 
-    <nav class="navbar is-danger" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-          <h1 class="title is-2">Logo</h1>
-        </a>
-
-        <a role="button" class="navbar-burger" id="burger" aria-label="menu" aria-expanded="false" data-target="nav-links">
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
-      </div>
-
-      <div class="navbar-menu" id="nav-links">
-        <div class="navbar-start">
-
-
-
-        </div>
-
-        <div class="navbar-end">
-            <a class="navbar-item" href="/">Accueil</a>
-            
-            <a class="navbar-item" href="/report">Envoyer rapport</a>
-
-          <div class="navbar-item">
-            <div class="field has-addons">
-              <p class="control">
-                <input class="input" type="text" placeholder="Rechercher">
-              </p>
-              <p class="control">
-                <button class="button">
-                  Search
-                </button>
-              </p>
-            </div>
+              <a aria-expanded="false" aria-label="menu" class="navbar-burger" data-target="nav-links" id="burger"
+                 role="button">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+              </a>
           </div>
 
+          <div class="navbar-menu" id="nav-links">
+              <div class="navbar-end">
+                  <a class="navbar-item" href="/">Accueil</a>
 
-          <div class="navbar-item has-text-centered pr-5">
-            {{#user}}
-              Bonjour<br />{{name}}
-            {{/user}}
-            {{^user}}
-              <a class="navbar-item" href="/login">Se connecter</a>
-            {{/user}}
+                  <a class="navbar-item" href="/report">Envoyer rapport</a>
+
+                  <div class="navbar-item">
+                      <div class="field has-addons">
+                          <p class="control">
+                              <input class="input" placeholder="Rechercher" type="text">
+                          </p>
+                          <p class="control">
+                              <button class="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                          </p>
+                      </div>
+                  </div>
+
+                  <div class="navbar-item has-text-centered pr-5">
+                      {{#user}}
+                      Bonjour<br/>{{name}}
+                      {{/user}}
+                      {{^user}}
+                      <a class="navbar-item" href="/login">Se connecter</a>
+                      {{/user}}
+                  </div>
+              </div>
           </div>
+      </nav>
 
-        </div>
-      </div>
-      </div>
-    </nav>
+      <main class="section">
+          <div class="columns">
+              <div class="column">
+                  <h1 class="title is-4 text-center">Créer un nouvel incident</h1>
+                  <form action="/insert" class="column" method="post">
+                      <div class="field">
+                          <label class="label">Description</label>
+                          <div class="control">
+                              <textarea class="textarea" name="desc" placeholder=""></textarea>
+                          </div>
+                      </div>
 
+                      <div class="field">
+                          <label class="label">Adresse</label>
+                          <div class="control">
+                              <input class="input" name="adr" type="text">
+                          </div>
+                      </div>
 
-    <section class="section">
-      <div class="columns ">
-        <form class="column is-7" action="/insert" method="post">
+                      <div class="field">
+                          <label class="label">Ajouter une image?</label>
+                          <div class="file">
+                              <label class="file-label">
+                                  <input class="file-input" type="file" accept="image/png, image/jpeg" name="image">
+                                  <span class="file-cta">
+                                      <span class="file-icon"><i class="fa fa-upload"></i></span>
+                                      <label class="file-label">Choisir une image</label>
+                                  </span>
+                              </label>
+                            </div>
+                      </div>
 
-          <div class="field">
-            <label class="label">Description</label>
-            <div class="control">
-              <textarea class="textarea" placeholder="" name="description" ></textarea>
-            </div>
+                      <div class="field">
+                          <div class="control">
+                              <button class="button is-success">Envoyer</button>
+                          </div>
+                      </div>
+                  </form>
+              </div>
           </div>
+      </main>
 
-          <div class="field">
-            <label class="label">Adresse</label>
-            <div class="control">
-              <input class="input" type="text" name="adresse">
-            </div>
-          </div>
-
-          <div class="field">
-            <div class="file">
-              <label class="file-label">
-                <input class="file-input" type="file">
-                <span class="file-cta">
-                  <span class="file-icon">
-                    <i class="fa fa-upload" accept="image/png, image/jpeg" name="image"></i>
-                  </span>
-                  <span class="file-label">
-                    Choose a file…
-                  </span>
-                </span>
-              </label>
-            </div>
-          </div>
-
-          <div class="field">
-            <div class="control">
-              <button class="button is-success">Envoyer</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </section>
-    <script src="/js/master.js"></script>
+      <script src="/js/master.js"></script>
+      <script src="/js/new_report.js"></script>
   </body>
-
 </html>

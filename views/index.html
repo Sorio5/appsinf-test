@@ -1,109 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1" name="viewport">
+        <title>Page principale</title>
+        <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    </head>
 
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Page principale</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-  </head>
+    <body>
+        <nav aria-label="main navigation" class="navbar is-danger" role="navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/">
+                    <h1 class="title is-2">Logo</h1>
+                </a>
 
-  <body>
-
-    <nav class="navbar is-danger" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-          <h1 class="title is-2">Logo</h1>
-        </a>
-
-        <a role="button" class="navbar-burger" id="burger" aria-label="menu" aria-expanded="false" data-target="nav-links">
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
-      </div>
-
-      <div id="nav-links" class="navbar-menu">
-        <div class="navbar-start">
-
-
-
-        </div>
-
-        <div class="navbar-end">
-          <a class="navbar-item" href="/">Accueil</a>
-          <a class="navbar-item" href="/report">Envoyer rapport</a>
-
-          <div class="navbar-item">
-            <div class="field has-addons">
-              <p class="control">
-                <input class="input" type="text" placeholder="Rechercher">
-              </p>
-              <p class="control">
-                <button class="button">
-                  Search
-                </button>
-              </p>
+                <a aria-expanded="false" aria-label="menu" class="navbar-burger" data-target="nav-links" id="burger"
+                   role="button">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
             </div>
-          </div>
 
+            <div class="navbar-menu" id="nav-links">
+                <div class="navbar-end">
+                    <a class="navbar-item" href="/">Accueil</a>
+                    <a class="navbar-item" href="/report">Envoyer rapport</a>
 
-          <div class="navbar-item has-text-centered pr-5">
-            {{#user_param.user}}
-              Bonjour<br />{{name}}
-            {{/user_param.user}}
-            {{^user_param.user}}
-              <a class="navbar-item" href="/login">Se connecter</a>
-            {{/user_param.user}}
-          </div>
+                    <div class="navbar-item">
+                        <div class="field has-addons">
+                            <p class="control">
+                                <input class="input" placeholder="Rechercher" type="text">
+                            </p>
+                            <p class="control">
+                                <button class="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                            </p>
+                        </div>
+                    </div>
 
-        </div>
-      </div>
-      </div>
-    </nav>
+                    <div class="navbar-item has-text-centered pr-5">
+                        {{#user_param.user}}
+                            Bonjour<br/>{{name}}
+                        {{/user_param.user}}
+                        {{^user_param.user}}
+                            <a class="navbar-item" href="/login">Se connecter</a>
+                        {{/user_param.user}}
+                    </div>
 
-    <nav class="level is-mobile">
-      <div class="level-left ml-4">
-        <p class="level-item">
-          <a class="link is-info" href="/report">Signaler un incident</a>
-        </p>
-      </div>
-      <div class="level-right mr-4">
-        <p class="level-item">
-          <label class="label">Date</label>
-        </p>
-        <p class="tag is-medium" id="spanDate"></p>
-      </div>
-    </nav>
+                </div>
+            </div>
+        </nav>
 
-    <section class="section">
-      <div class="container">
-        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth is-fullheight">
-          <thead>
-            <th>Description</th>
-            <th>Adresse</th>
-            <th>Rapporté par</th>
-            <th>Date</th>
-          </thead>
-          <tbody>
-            {{#result}}
-            <tr>
-              
-              <td> {{description}} </td>
-              <td>{{adresse}}</td>
-              <td>{{author}}</td>
-              <td>{{date}}</td>
-              
+        <nav class="level is-mobile">
+            <div class="level-left ml-4">
+                <p class="level-item">
+                    <a class="link is-info" href="/report">Signaler un incident</a>
+                </p>
+            </div>
+            <div class="level-right mr-4">
+                <p class="level-item">
+                    <label class="label">Date</label>
+                </p>
+                <p class="tag is-medium" id="spanDate"></p>
+            </div>
+        </nav>
 
-            </tr>
-            {{/result}}
-          </tbody>
+        <main class="section">
+            <div class="container">
+                <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth is-fullheight">
+                    <tr>
+                        <th>Description</th>
+                        <th>Adresse</th>
+                        <th>Rapporté par</th>
+                        <th>Date</th>
+                    </tr>
+                    <tbody>
+                        {{#result}}
+                        <tr>
+                            <td>{{description}}</td>
+                            <td>{{adresse}}</td>
+                            <td>{{author}}</td>
+                            <td>{{date}}</td>
+                        </tr>
+                        {{/result}}
+                    </tbody>
+                </table>
+            </div>
+        </main>
 
-        </table>
-      </div>
-    </section>
-    <script src="/js/master.js"></script>
-    <script src="/js/index.js"></script>
-  </body>
-
+        <script src="/js/master.js"></script>
+        <script src="/js/index.js"></script>
+    </body>
 </html>
