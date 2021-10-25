@@ -1,7 +1,7 @@
 /**
  * File: db/mongoConnector.js
  * @author Theo Technicguy
- * @version 0.0.2
+ * @version 0.0.3
  *
  * This module manages database connections.
  * Inspired by the CodeWe Project's MongoDB module - MIT License
@@ -39,7 +39,7 @@ class MongoConnector {
             this.fmp = await this.db.db("FixMyPath");
             // Set collection variables
             this.users = this.fmp.collection("users");
-            this.incidents = this.fmp.constructor("incidents");
+            this.incidents = this.fmp.collection("incidents");
 
             return {"code": 200, "message": "Success"};
         } catch (err) {
