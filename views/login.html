@@ -47,6 +47,16 @@
     <main class="section text-center">
         <div class="columns">
             <div class="column">
+                {{#errors}}
+                    <p class="notification is-danger is-light block">
+                        {{error}}
+                    </p>
+                {{/errors}}
+                {{#successes}}
+                    <p class="notification is-success is-light block">
+                        {{success}}
+                    </p><br />
+                {{/successes}}
                 <form action="/login" class="box" method="post">
                     <h1 class="title is-4">Se connecter</h1>
                     <div class="field">

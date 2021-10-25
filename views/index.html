@@ -68,6 +68,16 @@
 
         <main class="section">
             <div class="container">
+                {{#errors}}
+                    <p class="button is-danger is-light m-1">
+                        {{error}}
+                    </p><br />
+                {{/errors}}
+                {{#successes}}
+                    <p class="button is-success is-light m-1">
+                        {{success}}
+                    </p><br />
+                {{/successes}}
                 <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth is-fullheight">
                     <tr>
                         <th>Description</th>

@@ -57,6 +57,16 @@
       <main class="section">
           <div class="columns">
               <div class="column">
+                  {{#errors}}
+                    <p class="button is-danger is-light m-1">
+                      {{error}}
+                    </p><br />
+                  {{/errors}}
+                  {{#successes}}
+                    <p class="button is-success is-light m-1">
+                      {{success}}
+                    </p><br />
+                  {{/successes}}
                   <h1 class="title is-4 text-center">Créer un nouvel incident</h1>
                   <form action="/insert" class="column" method="post">
                       <div class="field">

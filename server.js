@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.1.7
+ * @version 0.1.8
  */
 
 // Imports and modules
@@ -74,8 +74,7 @@ app.get(["/", "/index", "/index.html"], (req, res) => {
 app.post("/login", async (req, res) => {
     // Filter out incomplete responses
     if (!req.body.username || !req.body.password) {
-        // TODO: Send error feedback.
-        res.redirect("/login");
+        res.render("login.html", {"errors": [{"error": "Il faut remplir toutes les entrées!"}]});
 
         // Break out of function
         return;
@@ -85,11 +84,6 @@ app.post("/login", async (req, res) => {
     const username = req.body.username;
     // Get username from database
     const user = (await db.getUser(username));
-    // Check if username exists
-    if (!user) {
-        res.redirect("/login");
-        return;
-    }
 
     // Hash password with salt
     // We use SHA-2 as SHA-1 is getting phased out.
@@ -106,8 +100,8 @@ app.post("/login", async (req, res) => {
         // Redirect.
         res.redirect("/report");
     } else {
-        // TODO: Send error feedback.
-        res.redirect("/login");
+        res.render("login.html",
+            {"errors": [{"error": "La combinaison utilisateur/mot de passe donnée est inexistante."}]});
     }
 });
 
@@ -121,31 +115,28 @@ app.post("/register", async (req, res) => {
 
     // Check if all fields are filled
     if (!body.username || !body.display_name || !body.email || !body.password || !body.password2) {
-        // TODO: Send error feedback
-        res.redirect("/login");
+        res.render("login.html", {"errors": [{"error": "Il faut remplir toutes les entrées!"}]});
         return;
     }
 
     // Check if user already exists
     // Usernames have to be unique.
     if (await db.getUser(body.username)) {
-        // TODO: Send error feedback
-        res.redirect("/login");
+        res.render("login.html", {"errors": [{"error": "Ce nom d'utilisateur est déjà pris."}]});
         return;
     }
 
     // Validate email
+    // TODO: Validate email by sending a verification email
     const emailRE = /[A-Za-z0-9._+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/
     if (!emailRE.test(body.email)) {
-        // TODO: Send error feedback
-        res.redirect("/login");
+        res.render("login.html", {"errors": [{"error": "L'email ne semble pas correcte."}]});
         return;
     }
 
     // Check that passwords are equal
     if (body.password !== body.password2) {
-        // TODO: Send error feedback
-        res.redirect("/login");
+        res.render("login.html", {"errors": [{"error": "Les mots de passes ne coinciedent pas."}]});
         return;
     }
 
@@ -159,7 +150,7 @@ app.post("/register", async (req, res) => {
 
     await db.createUser(data);
 
-    res.redirect("/login");
+    res.render("login.html", {"successes": [{"success": `Bienvenue ${data.display_name}!\nConnectez-vous et envoyez votre premier inciedent.`}]});
 });
 
 app.get("/login", (req, res) => {
