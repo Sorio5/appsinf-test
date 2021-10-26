@@ -88,7 +88,7 @@ app.post("/login", async (req, res) => {
     // Hash password with salt
     // We use SHA-2 as SHA-1 is getting phased out.
     let password = utils.hash(req.body.password);
-
+    if(user===null){res.render("login.html",{"errors": [{"error": "La combinaison utilisateur/mot de passe donnée est inexistante."}]});return;};
     if (password === user.password) {
         // Now the user is authenticated.
         // Prefer user.username over req.body.username, even if they are equal, as the first one is our data
