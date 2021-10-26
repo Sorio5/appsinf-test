@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.1.8
+ * @version 0.1.9
  */
 
 // Imports and modules
@@ -85,11 +85,8 @@ app.post("/login", async (req, res) => {
     // Get username from database
     const user = (await db.getUser(username));
 
-    // Hash password with salt
-    // We use SHA-2 as SHA-1 is getting phased out.
     let password = utils.hash(req.body.password);
-    if(user===null){res.render("login.html",{"errors": [{"error": "La combinaison utilisateur/mot de passe donnée est inexistante."}]});return;};
-    if (password === user.password) {
+    if ((user !== null) && (password === user.password)) {
         // Now the user is authenticated.
         // Prefer user.username over req.body.username, even if they are equal, as the first one is our data
         // Update last login time
@@ -153,20 +150,27 @@ app.post("/register", async (req, res) => {
     res.render("login.html", {"successes": [{"success": `Bienvenue ${data.display_name}!\nConnectez-vous et envoyez votre premier incident.`}]});
 });
 
+/**
+ * Initial Login page display
+ * @method get
+ * @path /login
+ */
 app.get("/login", (req, res) => {
     res.render("login.html");
 });
 
+/**
+ * Incident report page
+ * @method get
+ * @path /report /new_incident
+ */
 app.get(["/report", "/new_incident"], (req, res) => {
-    let user_param;
-    // Make user_param empty if no user is supplied.
-    if (req.session.username == null) {
-        user_param = {}
+    // Make sure users are logged in
+    if (req.session.username) {
+        res.render("new_incident.html", {"user": {"name": req.session.username}});
     } else {
-        user_param = {"user": {"name": req.session.username}};
+        res.redirect("/login");
     }
-
-    res.render("new_incident.html", user_param);
 });
 
 app.post("/insert", (req, res) => {
