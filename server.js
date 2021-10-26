@@ -136,7 +136,7 @@ app.post("/register", async (req, res) => {
 
     // Check that passwords are equal
     if (body.password !== body.password2) {
-        res.render("login.html", {"errors": [{"error": "Les mots de passes ne coinciedent pas."}]});
+        res.render("login.html", {"errors": [{"error": "Les mots de passes ne coincident pas."}]});
         return;
     }
 
@@ -150,7 +150,7 @@ app.post("/register", async (req, res) => {
 
     await db.createUser(data);
 
-    res.render("login.html", {"successes": [{"success": `Bienvenue ${data.display_name}!\nConnectez-vous et envoyez votre premier inciedent.`}]});
+    res.render("login.html", {"successes": [{"success": `Bienvenue ${data.display_name}!\nConnectez-vous et envoyez votre premier incident.`}]});
 });
 
 app.get("/login", (req, res) => {
