@@ -212,19 +212,19 @@ app.get("/show_incident", (req, res) => {
         user_param = {"user": {"name": req.session.username}};
     }
     //find the incident with desired id
+    var auteur=false; //true si auteur est username
     mongo.connect(config.DB_URL, (err, client) => {
         if (err) throw err;
         var dbo = client.db("users");
         dbo.collection("incidents").findOne({"_id":ObjectId(id)},(err, result) => {
             if (err) throw err;
-
-            res.render("show_incident.html", {result, user_param});
+            if(req.session.username===result.author){auteur=true};
+            res.render("show_incident.html", {result, user_param,auteur});
             client.close();
         });
-    });
-    
-   
+    }); 
 });
+
 /**
  * update page
  * @method post

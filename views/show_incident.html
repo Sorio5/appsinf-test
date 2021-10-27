@@ -67,19 +67,19 @@
         </nav>
 
         <main class="section">
-            {{#result}}
+            
             <form action="/update?id={{_id}}" class="column" method="post" id="update">
                 <div class="field">
                     <label class="label">Description</label>
                     <div class="control">
-                        <textarea class="textarea" name="desc" placeholder="">{{description}}</textarea>
+                        <textarea class="textarea" name="desc" placeholder="">{{result.description}}</textarea>
                     </div>
                 </div>
 
                 <div class="field">
                     <label class="label">Adresse</label>
                     <div class="control">
-                        <textarea class="input" name="adr" type="text" placeholder="">{{adresse}}</textarea>
+                        <textarea class="input" name="adr" type="text" placeholder="">{{result.adresse}}</textarea>
                     </div>
                 </div>
 
@@ -101,11 +101,18 @@
 
                 <div class="field">
                     <div class="control">
+                        {{#auteur}}
                         <button class="button is-success" id="update" form="update" type="submit">Mettre à jour</button>
                         <a class="button is-danger" id="delete" href="/delete?id={{_id}}">Supprimer</a>
+                        {{/auteur}}
+                        {{^auteur}}
+                        <button class="button is-success" id="update" form="update" type="submit" disabled title="Vous n'êtes pas l'auteur">Mettre à jour</button>
+                        <button class="button is-danger " id="delete" href="/delete?id={{_id}}" title="vous n'êtes pas l'auteur" disabled>Supprimer</button>
+                        {{/auteur}}
+                        
                     </div>
                 </div>
-            </form>{{/result}}
+            </form>
         </main>
 
         <script src="/js/master.js"></script>
