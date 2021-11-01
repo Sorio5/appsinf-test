@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.1.9
+ * @version 0.1.12
  */
 
 // Imports and modules
@@ -17,7 +17,7 @@ const req = require("express/lib/request");
 const config = require("./config/config");
 const db = require("./db/mongoConnector");
 const utils = require("./utils");
-const { ObjectId } = require("mongodb");
+const {ObjectId} = require("mongodb");
 
 // --- Config ---
 const HOST = config.HOST;
@@ -89,8 +89,8 @@ app.post("/login", async (req, res) => {
     // Hash password with salt
     // We use SHA-2 as SHA-1 is getting phased out.
     let password = utils.hash(req.body.password);
-    if(user===null){res.render("login.html",{"errors": [{"error": "La combinaison utilisateur/mot de passe donnée est inexistante."}]});return;};
-    if (password === user.password) {
+
+    if (user !== null && password === user.password) {
         // Now the user is authenticated.
         // Prefer user.username over req.body.username, even if they are equal, as the first one is our data
         // Update last login time
@@ -154,20 +154,27 @@ app.post("/register", async (req, res) => {
     res.render("login.html", {"successes": [{"success": `Bienvenue ${data.display_name}!\nConnectez-vous et envoyez votre premier incident.`}]});
 });
 
+/**
+ * Initial Login page display
+ * @method get
+ * @path /login
+ */
 app.get("/login", (req, res) => {
     res.render("login.html");
 });
 
+/**
+ * Incident report page
+ * @method get
+ * @path /report /new_incident
+ */
 app.get(["/report", "/new_incident"], (req, res) => {
-    let user_param;
-    // Make user_param empty if no user is supplied.
-    if (req.session.username == null) {
-        user_param = {}
+    // Make sure users are logged in
+    if (req.session.username) {
+        res.render("new_incident.html", {"user": {"name": req.session.username}});
     } else {
-        user_param = {"user": {"name": req.session.username}};
+        res.redirect("/login");
     }
-
-    res.render("new_incident.html", user_param);
 });
 
 app.post("/insert", (req, res) => {
@@ -202,7 +209,7 @@ app.post("/insert", (req, res) => {
  * @path /show_incident
  */
 app.get("/show_incident", (req, res) => {
-    var query = require('url').parse(req.url,true).query;
+    var query = require('url').parse(req.url, true).query;
     let id = query.id;
     let user_param;
     // Make user_param empty if no user is supplied.
@@ -212,17 +219,19 @@ app.get("/show_incident", (req, res) => {
         user_param = {"user": {"name": req.session.username}};
     }
     //find the incident with desired id
-    var auteur=false; //true si auteur est username
+    var auteur = false; //true si auteur est username
     mongo.connect(config.DB_URL, (err, client) => {
         if (err) throw err;
         var dbo = client.db("users");
-        dbo.collection("incidents").findOne({"_id":ObjectId(id)},(err, result) => {
+        dbo.collection("incidents").findOne({"_id": ObjectId(id)}, (err, result) => {
             if (err) throw err;
-            if(req.session.username===result.author){auteur=true};
-            res.render("show_incident.html", {result, user_param,auteur});
+            if (req.session.username === result.author) {
+                auteur = true;
+            }
+            res.render("show_incident.html", {result, user_param, auteur});
             client.close();
         });
-    }); 
+    });
 });
 
 /**
@@ -231,7 +240,7 @@ app.get("/show_incident", (req, res) => {
  * @path /update
  */
 app.post("/update", (req, res) => {
-    var query = require('url').parse(req.url,true).query;
+    var query = require('url').parse(req.url, true).query;
     let id = query.id;
     if (req.session.username == null) {
         res.redirect('/login')
@@ -247,8 +256,12 @@ app.post("/update", (req, res) => {
         mongo.connect(config.DB_URL, (err, client) => {
             if (err) throw err;
             var dbo = client.db("users");
-            dbo.collection("incidents").deleteOne({"_id":ObjectId(id)});
-            dbo.collection("incidents").updateOne({"_id":ObjectId(id)},{$set:item},{ new: true, upsert: true, returnOriginal: false }, function (err) {
+            dbo.collection("incidents").deleteOne({"_id": ObjectId(id)});
+            dbo.collection("incidents").updateOne({"_id": ObjectId(id)}, {$set: item}, {
+                new: true,
+                upsert: true,
+                returnOriginal: false
+            }, function (err) {
                 if (err) throw err;
                 console.log(item);
                 client.close();
@@ -260,23 +273,21 @@ app.post("/update", (req, res) => {
 });
 //delete
 app.get("/delete", (req, res) => {
-    var query = require('url').parse(req.url,true).query;
+    var query = require('url').parse(req.url, true).query;
     let id = query.id;
     if (req.session.username == null) {
         res.redirect('/login')
     } else {
-        let user_param = req.session.username;
-        
         mongo.connect(config.DB_URL, (err, client) => {
             if (err) throw err;
             var dbo = client.db("users");
-            dbo.collection("incidents").deleteOne({"_id":ObjectId(id)}); 
+            dbo.collection("incidents").deleteOne({"_id": ObjectId(id)});
         });
         res.redirect('/')
     }
 
 });
-app.use(express.static("content"));
+
 app.listen(PORT, HOST, () => {
     console.log(`Started server. Serving http://${HOST}:${PORT}`);
 });
