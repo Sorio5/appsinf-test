@@ -25,3 +25,4 @@ Thanks to
 - Every node package author - check each package for respective licensing
 - the [CodeWe Project](https://github.com/CodeWe-projet/CodeWe) for their MongoDB connector file - MIT License
 - [Bulma](https://bulma.io) for their Cascading Style Sheets - MIT License
+- [Gregor Cresnar Premium](https://www.flaticon.com/authors/gregor-cresnar-premium) and [Freepik](https://www.freepik.com) for their logo assets - Flaticon Terms of Use
