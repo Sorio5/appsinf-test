@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.1.12
+ * @version 0.2.0
  */
 
 // Imports and modules
@@ -23,6 +23,7 @@ const {ObjectId} = require("mongodb");
 const HOST = config.HOST;
 const PORT = config.PORT;
 const SECRET = config.SECRET;
+const TLS = config.TLS;
 
 // --- Setup server ---
 const app = express();
@@ -288,6 +289,29 @@ app.get("/delete", (req, res) => {
 
 });
 
-app.listen(PORT, HOST, () => {
-    console.log(`Started server. Serving http://${HOST}:${PORT}`);
-});
+// Start server in HTTP if no TLS certificate is given
+// Start an HTTPS otherwise
+if (!TLS || !TLS["KEY"] || !TLS["CRT"]) {
+    app.listen(PORT, HOST, () => {
+        console.log(`Started server. Serving http://${HOST}:${PORT}`);
+    });
+} else {
+    // Basic TLS configuration
+    let tls_config = {
+        key: fs.readFileSync(TLS["KEY"]),
+        cert: fs.readFileSync(TLS["CRT"])
+    };
+
+    // Add Certificate Authority
+    if (TLS["CA"]) {
+        tls_config["ca"] = fs.readFileSync(TLS["CA"])
+    }
+
+    // Add passphrase
+    if (TLS["PW"]) {
+        tls_config["passphrase"] = TLS["PW"];
+    }
+
+    https.createServer(tls_config, app).listen(PORT, HOST);
+    console.log(`Started server. Serving https://${HOST}:${PORT}`);
+}

@@ -3,5 +3,10 @@
   "HOST": "localhost",
   "DB_URL": "mongodb://localhost:27017/",
   "SECRET": null,
-  "SALT": null
+  "SALT": null,
+  "TLS": {
+    "key": null,
+    "cert": null,
+    "ca": null
+  }
 }
