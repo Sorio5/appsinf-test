@@ -1,7 +1,7 @@
 /**
  * File: db/mongoConnector.js
- * @author Theo Technicguy
- * @version 0.0.3
+ * @author Theo Technicguy, Sorio
+ * @version 0.0.4
  *
  * This module manages database connections.
  * Inspired by the CodeWe Project's MongoDB module - MIT License
@@ -110,7 +110,10 @@ class MongoConnector {
     /**
      * Create a new incident
      * @param data: dictionary {
-     *      TBD
+     *     description,
+     *     adress,
+     *     author: username from table `users`,
+     *     status: One of `Recorded`, `Work in Progress` or `Done`
      * }
      * @returns {Promise<{code: number, message: string}|{code: number, message: string, error}>}
      *      code: 200, message: "Success"
@@ -119,7 +122,12 @@ class MongoConnector {
      */
     async createIncident(data) {
         let document = {
-            // TODO: Define structure
+            "description":data.description,
+            "adress":data.adress,
+            "author":data.author,
+            "status":"Recorded",
+            "creation_date":Date.now(),
+            "last_update":Date.now() 
         };
 
         // Insert incident
@@ -160,7 +168,7 @@ class MongoConnector {
      * @returns {Promise<{code: number, message: string}|{code: number, message: string, error}>}
      *      code: 200, message: "Success"
      *      code: 500, message: "Error", error: error
-     * @output Database entry for user updated
+     * @output Database entry for incident updated
      */
     async updateIncident(id, param, newValue) {
         try {
@@ -184,6 +192,16 @@ class MongoConnector {
     async updateLastVisit(username) {
         return await this.updateUser(username, "last_visit", Date.now());
     }
+        /**
+     * Update the last update visit of an incident
+     * @param id
+     * @returns {Promise<{code: number, message: string}|{code: number, message: string, error}>}
+     *      code: 200, message: "Success"
+     *      code: 500, message: "Error", error: error
+     */
+    async updateLastUpdate(id) {
+        return await this.updateIncident(id, "last_update", Date.now());
+        }
 }
 
 /**
