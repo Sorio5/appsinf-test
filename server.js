@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.2.0
+ * @version 0.2.1
  */
 
 // Imports and modules
@@ -59,7 +59,7 @@ app.get(["/", "/index", "/index.html"], (req, res) => {
     }
     mongo.connect(config.DB_URL, (err, client) => {
         if (err) throw err;
-        var dbo = client.db("users");
+        var dbo = client.db("FixMyPath");
         dbo.collection("incidents").find({}).toArray((err, result) => {
             if (err) throw err;
             res.render("index.html", {result, user_param});
@@ -192,7 +192,8 @@ app.post("/insert", (req, res) => {
 
         mongo.connect(config.DB_URL, (err, client) => {
             if (err) throw err;
-            var dbo = client.db("users");
+            var dbo = client.db("FixMyPath");
+            dbo.collection("incidents").createIndex({description:"text"});
             dbo.collection("incidents").insertOne(item, function (err) {
                 if (err) throw err;
                 console.log(item);
@@ -223,7 +224,7 @@ app.get("/show_incident", (req, res) => {
     var auteur = false; //true si auteur est username
     mongo.connect(config.DB_URL, (err, client) => {
         if (err) throw err;
-        var dbo = client.db("users");
+        var dbo = client.db("FixMyPath");
         dbo.collection("incidents").findOne({"_id": ObjectId(id)}, (err, result) => {
             if (err) throw err;
             if (req.session.username === result.author) {
@@ -256,7 +257,7 @@ app.post("/update", (req, res) => {
 
         mongo.connect(config.DB_URL, (err, client) => {
             if (err) throw err;
-            var dbo = client.db("users");
+            var dbo = client.db("FixMyPath");
             dbo.collection("incidents").deleteOne({"_id": ObjectId(id)});
             dbo.collection("incidents").updateOne({"_id": ObjectId(id)}, {$set: item}, {
                 new: true,
@@ -281,12 +282,44 @@ app.get("/delete", (req, res) => {
     } else {
         mongo.connect(config.DB_URL, (err, client) => {
             if (err) throw err;
-            var dbo = client.db("users");
+            var dbo = client.db("FixMyPath");
             dbo.collection("incidents").deleteOne({"_id": ObjectId(id)});
         });
         res.redirect('/')
     }
 
+});
+
+/**
+ * search page
+ * @method post
+ * @path /search
+ */
+app.post("/search", (req,res)=>{
+    var searched = req.body.searched;
+    let user_param;
+    // Make user_param empty if no user is supplied.
+    if (req.session.username == null) {
+        user_param = {}
+    } else {
+        user_param = {"user": {"name": req.session.username}};
+    }
+    mongo.connect(config.DB_URL, (err, client) => {
+        if (err) throw err;
+        var dbo = client.db("FixMyPath");
+        dbo.collection("incidents").find({ $text: { $search: searched }}).toArray((err, result) => {
+            if (err) {
+                if (err.codeName==='IndexNotFound'){
+                    res.render("index.html",{"errors": [{"error": "Aucune correspondances"}],user_param});
+                    return;
+                }else{
+                    throw err;
+                }
+            }
+            res.render("index.html", {result, user_param});
+            client.close();
+        });
+    });
 });
 
 // Start server in HTTP if no TLS certificate is given

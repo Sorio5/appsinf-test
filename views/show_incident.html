@@ -32,12 +32,14 @@
                     <a class="navbar-item" href="/report">Envoyer rapport</a>
 
                     <div class="navbar-item">
+                        <form action="/search" method="post" id="search"></form>
                         <div class="field has-addons">
                             <p class="control">
-                                <input class="input" placeholder="Rechercher" type="text">
+                                    <input class="input" placeholder="Rechercher" type="text" name="searched" form="search">   
                             </p>
                             <p class="control">
-                                <button class="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                
+                                <button class="button" form="search"><i class="fa fa-search" aria-hidden="true"></i></button>
                             </p>
                         </div>
                     </div>
