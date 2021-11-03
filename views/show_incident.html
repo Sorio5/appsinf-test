@@ -71,7 +71,7 @@
 
         <main class="section">
             
-            <form action="/update?id={{_id}}" class="column" method="post" id="update">
+            <form action="/update?id={{result._id}}" class="column" method="post" id="update">
                 <div class="field">
                     <label class="label">Description</label>
                     <div class="control">
@@ -104,14 +104,14 @@
 
                 <div class="field">
                     <div class="control">
-                        {{#auteur}}
+                        {{#result}}
                         <button class="button is-success" id="update" form="update" type="submit">Mettre à jour</button>
                         <a class="button is-danger" id="delete" href="/delete?id={{_id}}">Supprimer</a>
-                        {{/auteur}}
-                        {{^auteur}}
+                        {{/result}}
+                        {{^result}}
                         <button class="button is-success" id="update" form="update" type="submit" disabled title="Vous n'êtes pas l'auteur">Mettre à jour</button>
                         <button class="button is-danger " id="delete" href="/delete?id={{_id}}" title="vous n'êtes pas l'auteur" disabled>Supprimer</button>
-                        {{/auteur}}
+                        {{/result}}
                         
                     </div>
                 </div>
