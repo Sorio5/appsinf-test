@@ -307,15 +307,10 @@ app.post("/search", (req,res)=>{
     mongo.connect(config.DB_URL, (err, client) => {
         if (err) throw err;
         var dbo = client.db("FixMyPath");
-        dbo.collection("incidents").find({ $text: { $search: searched }}).toArray((err, result) => {
-            if (err) {
-                if (err.codeName==='IndexNotFound'){
-                    res.render("index.html",{"errors": [{"error": "Aucune correspondances"}],user_param});
-                    return;
-                }else{
-                    throw err;
-                }
-            }
+        dbo.collection("incidents").find({ $text: { $search: searched }}).toArray((err, result) => { 
+            if (err)throw err;
+            console.log(result);
+            if (result.length===0){res.render("index.html", {"errors": [{"error": "Aucune corespondances"}], user_param});return;}
             res.render("index.html", {result, user_param});
             client.close();
         });
