@@ -309,7 +309,6 @@ app.post("/search", (req,res)=>{
         var dbo = client.db("FixMyPath");
         dbo.collection("incidents").find({ $text: { $search: searched }}).toArray((err, result) => { 
             if (err)throw err;
-            console.log(result);
             if (result.length===0){res.render("index.html", {"errors": [{"error": "Aucune corespondances"}], user_param});return;}
             res.render("index.html", {result, user_param});
             client.close();
