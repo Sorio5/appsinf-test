@@ -89,16 +89,18 @@
                         <th>Adresse</th>
                         <th>Rapporté par</th>
                         <th>Date</th>
+                        <th>Status</th>
                     </tr>
                     <tbody>
-                        {{#result}}
+                        {{#results}}
                         <tr>
                             <td><a href="/show_incident?id={{_id}}">{{#description}}{{description}}{{/description}}{{^description}}vide{{/description}}</a></td>
-                            <td>{{adresse}}</td>
+                            <td>{{address}}</td>
                             <td>{{author}}</td>
                             <td>{{date}}</td>
+                            <td>{{status}}</td>
                         </tr>
-                        {{/result}}
+                        {{/results}}
                     </tbody>
                 </table>
             </div>

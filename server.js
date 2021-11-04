@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.3.0
+ * @version 0.4.0
  */
 
 // Imports and modules
@@ -12,13 +12,11 @@ const consolidate = require("consolidate");
 const express = require("express");
 const session = require('express-session');
 const https = require('https');
-const mongo = require("mongodb").MongoClient;
 const multer = require("multer");
 
 const config = require("./config/config");
 const db = require("./db/mongoConnector");
 const utils = require("./utils");
-const {ObjectId} = require("mongodb");
 
 // --- Config ---
 const HOST = config.HOST;
@@ -56,23 +54,15 @@ app.use(session({
 // Set image upload folder
 const upload = multer({dest: __dirname + "/public/uploads/img"});
 
-app.get(["/", "/index", "/index.html"], (req, res) => {
-    let user_param;
-    // Make user_param empty if no user is supplied.
-    if (req.session.username == null) {
-        user_param = {}
-    } else {
-        user_param = {"user": {"name": req.session.username}};
+app.get(["/", "/index", "/index.html"], async (req, res) => {
+    const user_param = utils.getUserParam(req);
+
+    const results = await db.getAllIncidents();
+    for (let i = 0; i < results.length; i++) {
+        results[i]["date"] = new Date(results[i]["creation_date"]).toLocaleDateString();
     }
-    mongo.connect(config.DB_URL, (err, client) => {
-        if (err) throw err;
-        var dbo = client.db("FixMyPath");
-        dbo.collection("incidents").find({}).toArray((err, result) => {
-            if (err) throw err;
-            res.render("index.html", {result, user_param});
-            client.close();
-        });
-    });
+
+    res.render("index.html", {results, user_param});
 });
 
 /**
@@ -80,7 +70,7 @@ app.get(["/", "/index", "/index.html"], (req, res) => {
  * @method post
  * @path /login
  */
-app.post("/login", async (req, res) => {
+app.post("/login", upload.none(), async (req, res) => {
     // Filter out incomplete responses
     if (!req.body.username || !req.body.password) {
         res.render("login.html", {"errors": [{"error": "Il faut remplir toutes les entrées!"}]});
@@ -92,18 +82,16 @@ app.post("/login", async (req, res) => {
     // Ease username access
     const username = req.body.username;
     // Get username from database
-    const user = (await db.getUser(username));
-
-    // Hash password with salt
-    // We use SHA-2 as SHA-1 is getting phased out.
+    const user = await db.getUser(username);
+    // Hash and salt password
     let password = utils.hash(req.body.password);
 
     if (user !== null && password === user.password) {
         // Now the user is authenticated.
         // Prefer user.username over req.body.username, even if they are equal, as the first one is our data
+
         // Update last login time
         await db.updateLastVisit(user.username);
-
         // Set session cookie
         req.session.username = user.username;
         // Redirect.
@@ -119,7 +107,7 @@ app.post("/login", async (req, res) => {
  * @method post
  * @path /register
  */
-app.post("/register", async (req, res) => {
+app.post("/register", upload.none(), async (req, res) => {
     const body = req.body;
 
     // Check if all fields are filled
@@ -178,48 +166,42 @@ app.get("/login", (req, res) => {
  */
 app.get(["/report", "/new_incident"], (req, res) => {
     // Make sure users are logged in
-    if (req.session.username) {
-        res.render("new_incident.html", {"user": {"name": req.session.username}});
+    if (utils.userIsLogged(req)) {
+        res.render("new_incident.html", utils.getUserParam(req));
     } else {
         res.redirect("/login");
     }
 });
 
-app.post("/insert", upload.single("image"), (req, res) => {
-    if (req.session.username == null) {
+/**
+ * Incident creation page
+ * @method post
+ * @path /insert
+ */
+app.post("/insert", upload.single("image"), async (req, res) => {
+    // Make sure users are logged in
+    if (!utils.userIsLogged(req)) {
         res.redirect('/login')
-    } else {
-        let user_param = req.session.username;
-
-        // Check if user uploaded an image
-        let image_path;
-        if (req.file) {
-            image_path = path.basename(req.file["path"]);
-        } else {
-            image_path = null;
-        }
-        console.log(image_path);
-        var item = {
-            description: req.body.desc,
-            adresse: req.body.adr,
-            date: new Date().toLocaleDateString(),
-            author: user_param,
-            image: image_path
-        };
-
-        mongo.connect(config.DB_URL, (err, client) => {
-            if (err) throw err;
-            var dbo = client.db("FixMyPath");
-            dbo.collection("incidents").createIndex({description:"text"});
-            dbo.collection("incidents").insertOne(item, function (err) {
-                if (err) throw err;
-                console.log(item);
-                res.redirect('/')
-                client.close();
-            });
-        });
     }
 
+    const user_param = utils.getUserParam(req);
+
+    // Check if user uploaded an image
+    const image_path = utils.getFileName(req);
+
+    // Create data
+    const data = {
+        description: req.body.desc,
+        address: req.body.adr,
+        author: user_param.user.name,
+        image: image_path
+    };
+
+    // Insert data
+    await db.createIncident(data);
+
+    // Redirect to home page
+    res.redirect("/");
 });
 
 /**
@@ -227,30 +209,24 @@ app.post("/insert", upload.single("image"), (req, res) => {
  * @method get
  * @path /show_incident
  */
-app.get("/show_incident", (req, res) => {
-    var query = require('url').parse(req.url, true).query;
-    let id = query.id;
-    let user_param;
-    // Make user_param empty if no user is supplied.
-    if (req.session.username == null) {
-        user_param = {}
+app.get("/show_incident", async (req, res) => {
+    // Get current user
+    const user_param = utils.getUserParam(req);
+
+    // Get requested ID and incident
+    const id = req.query.id;
+    const incident = await db.getIncident(id);
+
+    // Check if the user is the author
+    let author;
+    if (user_param.user != null) {
+        author = user_param.user.name === incident.author;
     } else {
-        user_param = {"user": {"name": req.session.username}};
+        author = false;
     }
-    //find the incident with desired id
-    var auteur = false; //true si auteur est username
-    mongo.connect(config.DB_URL, (err, client) => {
-        if (err) throw err;
-        var dbo = client.db("FixMyPath");
-        dbo.collection("incidents").findOne({"_id": ObjectId(id)}, (err, result) => {
-            if (err) throw err;
-            if (req.session.username === result.author) {
-                auteur = true;
-            }
-            res.render("show_incident.html", {result, user_param, auteur});
-            client.close();
-        });
-    });
+
+    // Render the page
+    res.render("show_incident.html", {incident, user_param, author});
 });
 
 /**
@@ -258,53 +234,90 @@ app.get("/show_incident", (req, res) => {
  * @method post
  * @path /update
  */
-app.post("/update", (req, res) => {
-    var query = require('url').parse(req.url, true).query;
-    let id = query.id;
-    if (req.session.username == null) {
-        res.redirect('/login')
-    } else {
-        let user_param = req.session.username;
-        var item = {
-            description: req.body.desc,
-            adresse: req.body.adr,
-            date: new Date().toLocaleDateString(),
-            author: user_param
-        };
-
-        mongo.connect(config.DB_URL, (err, client) => {
-            if (err) throw err;
-            var dbo = client.db("FixMyPath");
-            dbo.collection("incidents").deleteOne({"_id": ObjectId(id)});
-            dbo.collection("incidents").updateOne({"_id": ObjectId(id)}, {$set: item}, {
-                new: true,
-                upsert: true,
-                returnOriginal: false
-            }, function (err) {
-                if (err) throw err;
-                console.log(item);
-                client.close();
-            });
-        });
-        res.redirect('/')
+app.post("/update", upload.single("image"), async (req, res) => {
+    // Make sure user is logged in
+    if (!utils.userIsLogged(req)) {
+        res.redirect("/login")
     }
+
+    // Get user
+    const user_param = utils.getUserParam(req);
+
+    // Get requested ID and incident
+    const id = req.query.id;
+    const incident = await db.getIncident(id);
+
+    // Check if the user is the author
+    let author;
+    if (user_param.user != null) {
+        author = user_param.user.name === incident.author;
+    } else {
+        author = false;
+    }
+
+    if (!author) {
+        res.status(403).end();
+    }
+
+    let changes = false;
+    const body = req.body;
+
+    if (body.desc !== incident.description) {
+        await db.updateIncident(id, "description", body.desc);
+        changes = true;
+    }
+
+    if (body.adr !== incident.address) {
+        await db.updateIncident(id, "address", body.adr);
+        changes = true;
+    }
+
+    if (req.file) {
+        await db.updateIncident(id, "image", utils.getFileName(req))
+        changes = true;
+    }
+
+    if (changes) {
+        await db.updateLastUpdate(id)
+    }
+
+    res.redirect('/')
 
 });
-//delete
-app.get("/delete", (req, res) => {
-    var query = require('url').parse(req.url, true).query;
-    let id = query.id;
-    if (req.session.username == null) {
-        res.redirect('/login')
-    } else {
-        mongo.connect(config.DB_URL, (err, client) => {
-            if (err) throw err;
-            var dbo = client.db("FixMyPath");
-            dbo.collection("incidents").deleteOne({"_id": ObjectId(id)});
-        });
-        res.redirect('/')
+
+/**
+ * Delete an incident
+ * @method get
+ * @path /delete
+ */
+app.get("/delete", async (req, res) => {
+    // Make sure user is logged in
+    if (!utils.userIsLogged(req)) {
+        res.redirect("/login")
     }
 
+    // Get user
+    const user_param = utils.getUserParam(req);
+
+    // Get requested ID and incident
+    const id = req.query.id;
+    const incident = await db.getIncident(id);
+
+    // Check if the user is the author
+    let author;
+    if (user_param.user != null) {
+        author = user_param.user.name === incident.author;
+    } else {
+        author = false;
+    }
+
+    if (!author) {
+        res.status(403).end();
+    }
+
+    await db.deleteIncident(id);
+
+    res.redirect("/");
 });
 
 /**
@@ -312,25 +325,21 @@ app.get("/delete", (req, res) => {
  * @method post
  * @path /search
  */
-app.post("/search", (req,res)=>{
-    var searched = req.body.searched;
-    let user_param;
-    // Make user_param empty if no user is supplied.
-    if (req.session.username == null) {
-        user_param = {}
-    } else {
-        user_param = {"user": {"name": req.session.username}};
+app.post("/search", upload.none(), async (req,res)=>{
+    const user_param = utils.getUserParam(req);
+
+    const search = req.body.searched;
+    console.log(search);
+
+    const results = await db.searchIncidents(search);
+    console.log(results);
+
+    if (results.length === 0) {
+        res.render("index.html", {"errors": [{"error": "Aucune correspondance trouvée"}], user_param});
+        return;
     }
-    mongo.connect(config.DB_URL, (err, client) => {
-        if (err) throw err;
-        var dbo = client.db("FixMyPath");
-        dbo.collection("incidents").find({ $text: { $search: searched }}).toArray((err, result) => { 
-            if (err)throw err;
-            if (result.length===0){res.render("index.html", {"errors": [{"error": "Aucune corespondances"}], user_param});return;}
-            res.render("index.html", {result, user_param});
-            client.close();
-        });
-    });
+
+    res.render("index.html", {results, user_param});
 });
 
 // Start server in HTTP if no TLS certificate is given

@@ -73,26 +73,26 @@
 
         <main class="section">
             
-            <form action="/update?id={{result._id}}" class="column" method="post" id="update">
+            <form action="/update?id={{incident._id}}" class="column" method="post" id="update">
                 <div class="field">
                     <label class="label">Description</label>
                     <div class="control">
-                        <textarea class="textarea" name="desc" placeholder="">{{result.description}}</textarea>
+                        <textarea class="textarea" name="desc" placeholder="">{{incident.description}}</textarea>
                     </div>
                 </div>
 
                 <div class="field">
                     <label class="label">Adresse</label>
                     <div class="control">
-                        <textarea class="input" name="adr" type="text" placeholder="">{{result.adresse}}</textarea>
+                        <textarea class="input" name="adr" type="text" placeholder="">{{incident.address}}</textarea>
                     </div>
                 </div>
 
                 <div class="field">
                     <label class="label">Ajouter une image?</label>
-                    {{#result.image}}
-                        <img src="/uploads/img/{{result.image}}" /><br />
-                    {{/result.image}}
+                    {{#incident.image}}
+                        <img src="/uploads/img/{{incident.image}}" /><br />
+                    {{/incident.image}}
                     <div class="file">
                         <label class="file-label">
                             <input class="file-input" type="file" accept="image/png, image/jpeg" name="image">
@@ -101,23 +101,19 @@
                                 <label class="file-label">Choisir une image</label>
                             </span>
                         </label>
-                        
-                        
                     </div>
-                    
                 </div>
 
                 <div class="field">
                     <div class="control">
-                        {{#auteur}}
+                        {{#author}}
                         <button class="button is-success" id="update" form="update" type="submit">Mettre à jour</button>
-                        <a class="button is-danger" id="delete" href="/delete?id={{result._id}}">Supprimer</a>
-                        {{/auteur}}
-                        {{^auteur}}
+                        <a class="button is-danger" id="delete" href="/delete?id={{incident._id}}">Supprimer</a>
+                        {{/author}}
+                        {{^author}}
                         <button class="button is-success" id="update" form="update" type="submit" disabled title="Vous n'êtes pas l'auteur">Mettre à jour</button>
-                        <button class="button is-danger " id="delete" href="/delete?id={{result._id}}" title="vous n'êtes pas l'auteur" disabled>Supprimer</button>
-                        {{/auteur}}
-                        
+                        <button class="button is-danger " id="delete" title="vous n'êtes pas l'auteur" disabled>Supprimer</button>
+                        {{/author}}
                     </div>
                 </div>
             </form>
