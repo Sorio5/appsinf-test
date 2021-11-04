@@ -106,14 +106,14 @@
 
                 <div class="field">
                     <div class="control">
-                        {{#result}}
+                        {{#auteur}}
                         <button class="button is-success" id="update" form="update" type="submit">Mettre à jour</button>
-                        <a class="button is-danger" id="delete" href="/delete?id={{_id}}">Supprimer</a>
-                        {{/result}}
-                        {{^result}}
+                        <a class="button is-danger" id="delete" href="/delete?id={{result._id}}">Supprimer</a>
+                        {{/auteur}}
+                        {{^auteur}}
                         <button class="button is-success" id="update" form="update" type="submit" disabled title="Vous n'êtes pas l'auteur">Mettre à jour</button>
-                        <button class="button is-danger " id="delete" href="/delete?id={{_id}}" title="vous n'êtes pas l'auteur" disabled>Supprimer</button>
-                        {{/result}}
+                        <button class="button is-danger " id="delete" href="/delete?id={{result._id}}" title="vous n'êtes pas l'auteur" disabled>Supprimer</button>
+                        {{/auteur}}
                         
                     </div>
                 </div>
