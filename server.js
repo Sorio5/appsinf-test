@@ -197,10 +197,10 @@ app.post("/insert", (req, res) => {
             dbo.collection("incidents").insertOne(item, function (err) {
                 if (err) throw err;
                 console.log(item);
+                res.redirect('/')
                 client.close();
             });
         });
-        res.redirect('/')
     }
 
 });
