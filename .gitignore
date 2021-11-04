@@ -3,7 +3,7 @@
 # Extended from GitHub standard ignores for node
 # Interpreter: git
 # Ext: .gitignore
-# Version: 1.0.3
+# Version: 1.0.4
 # ------------------------------
 
 # Logs
@@ -128,3 +128,6 @@ package-lock.json
 
 # Configuration files
 config.json
+
+# Uploaded user content
+uploads/

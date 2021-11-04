@@ -1,18 +1,19 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.2.1
+ * @version 0.3.0
  */
 
 // Imports and modules
 const path = require("path");
-const express = require("express");
-const consolidate = require("consolidate");
-const mongo = require("mongodb").MongoClient;
-const https = require('https');
 const fs = require('fs');
+
+const consolidate = require("consolidate");
+const express = require("express");
 const session = require('express-session');
-const req = require("express/lib/request");
+const https = require('https');
+const mongo = require("mongodb").MongoClient;
+const multer = require("multer");
 
 const config = require("./config/config");
 const db = require("./db/mongoConnector");
@@ -27,11 +28,14 @@ const TLS = config.TLS;
 
 // --- Setup server ---
 const app = express();
+
 // Set rendering engine and views
 app.engine("html", consolidate.hogan);
 app.set("views", "views");
+
 // Set public assets folder
 app.use(express.static(path.join(__dirname, 'public/')));
+
 // By default, express sets an `X-Powered-By` header tag. Disable this
 app.disable("x-powered-by");
 
@@ -48,6 +52,9 @@ app.use(session({
         maxAge: 3600000
     }
 }));
+
+// Set image upload folder
+const upload = multer({dest: __dirname + "/public/uploads/img"});
 
 app.get(["/", "/index", "/index.html"], (req, res) => {
     let user_param;
@@ -178,16 +185,26 @@ app.get(["/report", "/new_incident"], (req, res) => {
     }
 });
 
-app.post("/insert", (req, res) => {
+app.post("/insert", upload.single("image"), (req, res) => {
     if (req.session.username == null) {
         res.redirect('/login')
     } else {
         let user_param = req.session.username;
+
+        // Check if user uploaded an image
+        let image_path;
+        if (req.file) {
+            image_path = path.basename(req.file["path"]);
+        } else {
+            image_path = null;
+        }
+        console.log(image_path);
         var item = {
             description: req.body.desc,
             adresse: req.body.adr,
             date: new Date().toLocaleDateString(),
-            author: user_param
+            author: user_param,
+            image: image_path
         };
 
         mongo.connect(config.DB_URL, (err, client) => {

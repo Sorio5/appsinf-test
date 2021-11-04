@@ -90,6 +90,9 @@
 
                 <div class="field">
                     <label class="label">Ajouter une image?</label>
+                    {{#result.image}}
+                        <img src="/uploads/img/{{result.image}}" /><br />
+                    {{/result.image}}
                     <div class="file">
                         <label class="file-label">
                             <input class="file-input" type="file" accept="image/png, image/jpeg" name="image">
