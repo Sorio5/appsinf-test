@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.4.1
+ * @version 0.4.2
  */
 
 // Imports and modules
@@ -71,7 +71,19 @@ app.get(["/", "/index", "/index.html"], async (req, res) => {
     const user_param = utils.getUserParam(req);
 
     const results = await db.getAllIncidents();
+    // Make data user friendly
     for (let i = 0; i < results.length; i++) {
+        // Change status language
+        switch (results[i]["status"]) {
+            case "Work in Progress": results[i]["status"] = "En cours"; break;
+            case "Done": results[i]["status"] = "Fini"; break;
+            default: results[i]["status"] = "Enregistré";
+        }
+
+        // Trim description
+        results[i]["description"] = results[i]["description"].substr(0, 50);
+
+        // Set date
         results[i]["date"] = new Date(results[i]["creation_date"]).toLocaleDateString();
     }
 
