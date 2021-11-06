@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.4.0
+ * @version 0.4.1
  */
 
 // Imports and modules
@@ -157,6 +157,16 @@ app.post("/register", upload.none(), async (req, res) => {
  */
 app.get("/login", (req, res) => {
     res.render("login.html");
+});
+
+/**
+ * Disconnect
+ * @method get
+ * @path /logout
+ */
+ app.get("/logout", (req, res) => {
+    utils.disconnectUser(req);
+    res.redirect("/login");
 });
 
 /**

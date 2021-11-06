@@ -46,7 +46,17 @@
 
                     <div class="navbar-item has-text-centered pr-5">
                         {{#user_param.user}}
-                            Bonjour<br/>{{name}}
+                        <div class="navbar-item has-dropdown" id="nav-links1">
+                            <a class="navbar-link is-arrowless" data-target="nav-links1" id="userPseudo">
+                                Bonjour<br/>{{name}}    
+                            </a>
+                            <div class="navbar-dropdown is-boxed is-right" >
+                              <a class="navbar-item"  href="/logout">
+                                Déconexion
+                              </a>
+                            </div>
+                        </div>
+                                         
                         {{/user_param.user}}
                         {{^user_param.user}}
                             <a class="navbar-item" href="/login">Se connecter</a>

@@ -1,7 +1,7 @@
 /**
  * File: utils.js
- * @author Theo Technicguy
- * @version 0.0.3
+ * @author Theo Technicguy, Sorio
+ * @version 0.0.4
  *
  * This file includes general utility functions
  */
@@ -61,6 +61,13 @@ class utils {
         }
     }
 
+    /**
+     * Disconnect user
+     * @param req
+     */
+     disconnectUser(req) {
+        return req.session.username = null;
+    }
 }
 
 module.exports = (new utils());
