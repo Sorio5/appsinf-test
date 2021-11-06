@@ -93,6 +93,7 @@
                         {{success}}
                     </p><br />
                 {{/successes}}
+
                 <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth is-fullheight">
                     <tr>
                         <th>Description</th>
@@ -104,12 +105,21 @@
                     <tbody>
                         {{#results}}
                         <tr>
-                            <td><a href="/show_incident?id={{_id}}">{{#description}}{{description}}{{/description}}{{^description}}vide{{/description}}</a></td>
-                            <td>{{address}}</td>
-                            <td>{{author}}</td>
-                            <td>{{date}}</td>
-                            <td>{{status}}</td>
+                            <td class="description">
+                                <a href="/show_incident?id={{_id}}">
+                                    <div class="description">
+                                    {{#description}}{{description}}{{/description}}{{^description}}vide{{/description}}
+                                    </div>
+                                </a>
+                            </td>
+                            <td class="address">{{address}}</td>
+                            <td class="author">{{author}}</td>
+                            <td class="date">{{date}}</td>
+                            <td class="status">{{status}}</td>
                         </tr>
+                        {{/results}}
+                        {{^results}}
+                            Encore aucun incident!
                         {{/results}}
                     </tbody>
                 </table>

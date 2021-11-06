@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.4.1
+ * @version 0.4.3
  */
 
 // Imports and modules
@@ -39,17 +39,30 @@ app.disable("x-powered-by");
 
 app.use(express.urlencoded({extended: true}));
 
-// Set express Sessions cookies
-app.use(session({
+// Set express sessions cookies
+let session_settings = {
+    // Server secret
     secret: SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
+        // Allow the cookie to be sent back to every page the server sends.
         path: '/',
+        // Do no allow document.cookies API to access cookies
         httpOnly: true,
-        maxAge: 3600000
-    }
-}));
+        // Require first-party interaction.
+        // Don't send over cross-site reference.
+        sameSite: true
+    },
+    // Name of the cookie
+    name: "fmp-session",
+    // Delete unset cookies
+    unset: "destroy"
+};
+
+// Only set secure tag if we have TLS
+if (!(!TLS || !TLS["KEY"] || !TLS["CRT"])) session_settings["cookie"]["secure"] = true;
+app.use(session(session_settings));
 
 // Set image upload folder
 const upload = multer({dest: __dirname + "/public/uploads/img"});
@@ -58,7 +71,19 @@ app.get(["/", "/index", "/index.html"], async (req, res) => {
     const user_param = utils.getUserParam(req);
 
     const results = await db.getAllIncidents();
+    // Make data user friendly
     for (let i = 0; i < results.length; i++) {
+        // Change status language
+        switch (results[i]["status"]) {
+            case "Work in Progress": results[i]["status"] = "En cours"; break;
+            case "Done": results[i]["status"] = "Fini"; break;
+            default: results[i]["status"] = "Enregistré";
+        }
+
+        // Trim description
+        results[i]["description"] = results[i]["description"].substr(0, 50);
+
+        // Set date
         results[i]["date"] = new Date(results[i]["creation_date"]).toLocaleDateString();
     }
 
@@ -156,6 +181,7 @@ app.post("/register", upload.none(), async (req, res) => {
  * @path /login
  */
 app.get("/login", (req, res) => {
+    if (utils.userIsLogged(req)) res.redirect("/");
     res.render("login.html");
 });
 
