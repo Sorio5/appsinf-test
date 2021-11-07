@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta content="width=device-width, initial-scale=1" name="viewport">
-        <title>Page principale</title>
+        <title>Acceuil</title>
         <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
         <link href="/css/master.css" rel="stylesheet">
@@ -35,10 +35,10 @@
                         <form action="/search" method="post" id="search"></form>
                         <div class="field has-addons">
                             <p class="control">
-                                    <input class="input" placeholder="Rechercher" type="text" name="searched" form="search">   
+                                    <input class="input" placeholder="Rechercher" type="text" name="searched" form="search">
                             </p>
                             <p class="control">
-                                
+
                                 <button class="button" form="search"><i class="fa fa-search" aria-hidden="true"></i></button>
                             </p>
                         </div>
@@ -48,7 +48,7 @@
                         {{#user_param.user}}
                         <div class="navbar-item has-dropdown" id="nav-links1">
                             <a class="navbar-link is-arrowless" data-target="nav-links1" id="userPseudo">
-                                Bonjour<br/>{{name}}    
+                                Bonjour<br/>{{name}}
                             </a>
                             <div class="navbar-dropdown is-boxed is-right" >
                               <a class="navbar-item"  href="/logout">
@@ -56,7 +56,7 @@
                               </a>
                             </div>
                         </div>
-                                         
+
                         {{/user_param.user}}
                         {{^user_param.user}}
                             <a class="navbar-item" href="/login">Se connecter</a>
@@ -66,28 +66,6 @@
                 </div>
             </div>
         </nav>
-
-        <nav class="level is-mobile">
-            <div class="level-left ml-4">
-                <p class="level-item">
-                    <a class="link is-info" href="/report">Signaler un incident</a>
-                </p>
-            </div>
-            <div class="level-right mr-4">
-                <p class="level-item">
-                    <label class="label">Date</label>
-                </p>
-                <p class="tag is-medium" id="spanDate"></p>
-            </div>
-        </nav>
-        
-        <div class="level">
-            <div class="level-item mx-3">
-                <figure class="image">
-                    <img src="/img/ImageB.jpg">
-                </figure>
-            </div>
-        </div>
 
         <main class="section">
             <div class="container">
@@ -101,34 +79,58 @@
                         {{success}}
                     </p><br />
                 {{/successes}}
+
+                <div class="level">
+                    <div class="level-item mx-3">
+                        <figure class="image">
+                            <img src="/img/ImageB.jpg">
+                        </figure>
+                    </div>
+                </div>
+
+                <h1 id="intro">
+                    <a href="/report">Signalez un incident</a> dans l'espace public d'Ottignies-Louvain-la-neuve!<br />
+                    Participez à <span id="color">l'amélioration de votre espace</span>!
+                </h1>
+                <div class="level" id="tbl-head">
+                    <a class="level-item button is-danger is-light" id="repbtn" href="/report">Signaler un incident</a>
+
+                    <div class="level-item">
+                        <p class="level-item">
+                            <label class="label">Date</label>
+                        </p>
+                        <p class="tag is-medium" id="spanDate"></p>
+                    </div>
+                </div>
+
                 <div class="table-container">
-                <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth is-fullheight">
-                    <tr>
-                        <th>Description</th>
-                        <th>Adresse</th>
-                        <th>Rapporté par</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                    </tr>
-                    <tbody>
-                        {{#results}}
+                    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth is-fullheight">
                         <tr>
-                            <td class="description">
-                                <a href="/show_incident?id={{_id}}">
-                                    <div class="description">
-                                    {{#description}}{{description}}{{/description}}{{^description}}vide{{/description}}
-                                    </div>
-                                </a>
-                            </td>
-                            <td class="address">{{address}}</td>
-                            <td class="author">{{author}}</td>
-                            <td class="date">{{date}}</td>
-                            <td class="status">{{status}}</td>
+                            <th>Description</th>
+                            <th>Adresse</th>
+                            <th>Rapporté par</th>
+                            <th>Date</th>
+                            <th>Status</th>
                         </tr>
-                        {{/results}}
-                        
-                    </tbody>
-                </table>
+                        <tbody>
+                            {{#results}}
+                            <tr>
+                                <td class="description">
+                                    <a href="/show_incident?id={{_id}}">
+                                        <div class="description">
+                                        {{#description}}{{description}}{{/description}}{{^description}}vide{{/description}}
+                                        </div>
+                                    </a>
+                                </td>
+                                <td class="address">{{address}}</td>
+                                <td class="author">{{author}}</td>
+                                <td class="date">{{date}}</td>
+                                <td class="status">{{status}}</td>
+                            </tr>
+                            {{/results}}
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </main>
