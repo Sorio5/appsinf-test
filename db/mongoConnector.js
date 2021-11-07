@@ -1,7 +1,7 @@
 /**
  * File: db/mongoConnector.js
  * @author Theo Technicguy, Sorio
- * @version 1.0.2
+ * @version 1.0.3
  *
  * This module manages database connections.
  * Inspired by the CodeWe Project's MongoDB module - MIT License
@@ -60,6 +60,20 @@ class MongoConnector {
     async getUser(username) {
         try {
             return await this.users.findOne({username: username});
+        } catch (err) {
+            return {"code": 500, "message": "Error", "error": new Error(err)};
+        }
+    }
+
+    /**
+     * Get a username's display name
+     * @param username
+     * @returns {Promise<*>}
+     */
+    async getDisplayName(username) {
+        try {
+            const user = await this.getUser(username);
+            return user.display_name;
         } catch (err) {
             return {"code": 500, "message": "Error", "error": new Error(err)};
         }

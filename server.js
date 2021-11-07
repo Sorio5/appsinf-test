@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.4.4
+ * @version 0.4.5
  */
 
 // Imports and modules
@@ -90,18 +90,22 @@ app.get(["/", "/index", "/index.html"], async (req, res) => {
     const results = await db.getAllIncidents();
     // Make data user friendly
     for (let i = 0; i < results.length; i++) {
+        let this_result = results[i]
         // Change status language
-        switch (results[i]["status"]) {
-            case "Work in Progress": results[i]["status"] = "En cours"; break;
-            case "Done": results[i]["status"] = "Fini"; break;
-            default: results[i]["status"] = "Enregistré";
+        switch (this_result["status"]) {
+            case "Work in Progress": this_result["status"] = "En cours"; break;
+            case "Done": this_result["status"] = "Fini"; break;
+            default: this_result["status"] = "Enregistré";
         }
 
         // Trim description
-        results[i]["description"] = results[i]["description"].substr(0, 50);
+        this_result["description"] = this_result["description"].substr(0, 50);
+
+        // Set author display name
+        this_result["author"] = await db.getDisplayName(this_result["author"]);
 
         // Set date
-        results[i]["date"] = new Date(results[i]["creation_date"]).toLocaleDateString();
+        this_result["date"] = new Date(this_result["creation_date"]).toLocaleDateString();
     }
 
     res.render("index.html", {results, user_param});
