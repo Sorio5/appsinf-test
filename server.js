@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.4.3
+ * @version 0.4.4
  */
 
 // Imports and modules
@@ -67,6 +67,23 @@ app.use(session(session_settings));
 // Set image upload folder
 const upload = multer({dest: __dirname + "/public/uploads/img"});
 
+
+// --- Routes ---
+/**
+ * favicon / tab icon serve
+ * @method get
+ * @path /favicon /favicon.ico
+ */
+app.get(["/favicon", "/favicon.ico"], (req, res) => {
+    res.setHeader("Content-Type", "image/png");
+    fs.createReadStream(path.join(__dirname, "public", "img", "logo.png")).pipe(res);
+});
+
+/**
+ * Main/home page
+ * @method get
+ * @path / /index /index.html
+ */
 app.get(["/", "/index", "/index.html"], async (req, res) => {
     const user_param = utils.getUserParam(req);
 
@@ -88,6 +105,16 @@ app.get(["/", "/index", "/index.html"], async (req, res) => {
     }
 
     res.render("index.html", {results, user_param});
+});
+
+/**
+ * Initial Login page display
+ * @method get
+ * @path /login
+ */
+app.get("/login", (req, res) => {
+    if (utils.userIsLogged(req)) res.redirect("/");
+    res.render("login.html");
 });
 
 /**
@@ -173,16 +200,6 @@ app.post("/register", upload.none(), async (req, res) => {
     await db.createUser(data);
 
     res.render("login.html", {"successes": [{"success": `Bienvenue ${data.display_name}!\nConnectez-vous et envoyez votre premier incident.`}]});
-});
-
-/**
- * Initial Login page display
- * @method get
- * @path /login
- */
-app.get("/login", (req, res) => {
-    if (utils.userIsLogged(req)) res.redirect("/");
-    res.render("login.html");
 });
 
 /**
@@ -395,11 +412,12 @@ app.post("/search", upload.none(), async (req,res)=>{
     res.render("index.html", {results, user_param});
 });
 
+
 // Start server in HTTP if no TLS certificate is given
 // Start an HTTPS otherwise
 if (!TLS || !TLS["KEY"] || !TLS["CRT"]) {
     app.listen(PORT, HOST, () => {
-        console.log(`Started server. Serving http://${HOST}:${PORT}`);
+        console.log(`Started server. Serving http://${HOST}:${PORT}` + "\nUsing HTTP. Consider setting up TLS for HTTPS!");
     });
 } else {
     // Basic TLS configuration
