@@ -80,6 +80,14 @@
                 <p class="tag is-medium" id="spanDate"></p>
             </div>
         </nav>
+        
+        <div class="level">
+            <div class="level-item mx-3">
+                <figure class="image">
+                    <img src="/img/ImageB.jpg">
+                </figure>
+            </div>
+        </div>
 
         <main class="section">
             <div class="container">
@@ -93,7 +101,7 @@
                         {{success}}
                     </p><br />
                 {{/successes}}
-
+                <div class="table-container">
                 <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth is-fullheight">
                     <tr>
                         <th>Description</th>
@@ -118,11 +126,10 @@
                             <td class="status">{{status}}</td>
                         </tr>
                         {{/results}}
-                        {{^results}}
-                            Encore aucun incident!
-                        {{/results}}
+                        
                     </tbody>
                 </table>
+                </div>
             </div>
         </main>
 

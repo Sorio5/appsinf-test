@@ -1,7 +1,8 @@
 table {
     max-width: 75%;
+    margin-left:auto;
+    margin-right:auto;
 }
-
 td {
     max-width: 25%;
     overflow: hidden;
@@ -19,3 +20,8 @@ div.description {
     width: 100%;
     height: 100%;
 }
+
+img {
+    max-width:970px;
+    max-height:250px;
+  }

@@ -374,6 +374,23 @@ app.post("/search", upload.none(), async (req,res)=>{
         res.render("index.html", {"errors": [{"error": "Aucune correspondance trouvée"}], user_param});
         return;
     }
+    else{
+        //make data user friendly
+        for (let i = 0; i < results.length; i++) {
+            // Change status language
+            switch (results[i]["status"]) {
+                case "Work in Progress": results[i]["status"] = "En cours"; break;
+                case "Done": results[i]["status"] = "Fini"; break;
+                default: results[i]["status"] = "Enregistré";
+            }
+    
+            // Trim description
+            results[i]["description"] = results[i]["description"].substr(0, 50);
+    
+            // Set date
+            results[i]["date"] = new Date(results[i]["creation_date"]).toLocaleDateString();
+        }
+    }
 
     res.render("index.html", {results, user_param});
 });
