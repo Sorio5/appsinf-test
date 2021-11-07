@@ -18,7 +18,7 @@ To run the website, first make sure you have an active instance of the Mongo ser
 ```shell
 node ./server.js
 ```
-This will run the server with default configuration. If you want to change settings, duplicate `config.dist.json` to `config.json` or edit the last one directly.
+This will run the server with default configuration. If you want to change settings, duplicate `config.dist.json` to `config.json` or edit the last one directly (see `./config/config.md` for details).
 
 ## Credits
 Thanks to
