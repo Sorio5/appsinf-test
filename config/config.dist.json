@@ -5,8 +5,8 @@
   "SECRET": null,
   "SALT": null,
   "TLS": {
-    "key": null,
-    "cert": null,
-    "ca": null
+    "KEY": null,
+    "CRT": null,
+    "CA": null
   }
 }
