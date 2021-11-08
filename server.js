@@ -378,13 +378,21 @@ app.get("/delete", async (req, res) => {
     const incident = await db.getIncident(id);
 
     // Check if the user is the author
-    let author;
+    let author;let admin;
     if (user_param.user != null) {
         author = user_param.user.name === incident.author;
     } else {
         author = false;
     }
-
+    
+    if (user_param.user != null) {
+        if(user_param.user.name === "admin"){
+            admin =true;author=true;
+        }
+    } else {
+        admin = false;
+    }
+    
     if (!author) {
         res.status(403).end();
     }
