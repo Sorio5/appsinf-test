@@ -83,6 +83,18 @@
         <main class="section">
             
             <form action="/update?id={{incident._id}}" class="column" method="post" id="update">
+                {{#admin}}
+                <div class="field">
+                    <div class="select" id="Status">
+                        <select name="status">
+                          <option>{{incident.status}} (actuellement)</option>
+                          <option value="Work in Progress">En cours</option>
+                          <option value="Done">Fini</option>
+                          <option value="Recorded">Enregistré</option>
+                        </select>
+                      </div>
+                </div>
+                {{/admin}}
                 <div class="field">
                     <label class="label">Description</label>
                     <div class="control">

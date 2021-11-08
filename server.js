@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.4.5
+ * @version 0.4.6
  */
 
 // Imports and modules
@@ -275,15 +275,22 @@ app.get("/show_incident", async (req, res) => {
     const incident = await db.getIncident(id);
 
     // Check if the user is the author
-    let author;
+    let author;let admin;
     if (user_param.user != null) {
         author = user_param.user.name === incident.author;
     } else {
         author = false;
     }
+    if (user_param.user != null) {
+        if(user_param.user.name === "admin"){
+            admin =true;author=true;
+        }
+    } else {
+        admin = false;
+    }
 
     // Render the page
-    res.render("show_incident.html", {incident, user_param, author});
+    res.render("show_incident.html", {incident, user_param, author,admin});
 });
 
 /**
@@ -305,13 +312,19 @@ app.post("/update", upload.single("image"), async (req, res) => {
     const incident = await db.getIncident(id);
 
     // Check if the user is the author
-    let author;
+    let author;let admin;
     if (user_param.user != null) {
         author = user_param.user.name === incident.author;
     } else {
         author = false;
     }
-
+    if (user_param.user != null) {
+        if(user_param.user.name === "admin"){
+            admin =true;author=true;
+        }
+    } else {
+        admin = false;
+    }
     if (!author) {
         res.status(403).end();
     }
@@ -326,6 +339,10 @@ app.post("/update", upload.single("image"), async (req, res) => {
 
     if (body.adr !== incident.address) {
         await db.updateIncident(id, "address", body.adr);
+        changes = true;
+    }
+    if (body.status !== incident.status) {
+        await db.updateIncident(id, "status", body.status);
         changes = true;
     }
 
