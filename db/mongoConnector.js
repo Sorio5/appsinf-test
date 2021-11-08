@@ -40,6 +40,20 @@ class MongoConnector {
             // Set collection variables
             this.users = this.fmp.collection("users");
             this.incidents = this.fmp.collection("incidents");
+            //adding an admin user
+            try{
+                this.users.deleteOne({"username":"admin"});
+            }catch(err){}
+            var utils = require('./../utils')
+            let document = {
+                "username": "admin",
+                "display_name":"admin",
+                "email": "admin@mail.com",
+                "password": utils.hash("admin"),
+                "creation_date": Date.now(),
+                "last_visit": Date.now()
+            };
+            this.users.insertOne(document);
 
             try {
                 this.incidents.createIndex({description: "text", address: "text", author: "text"}, {weights: { description: 5, address: 2}});
