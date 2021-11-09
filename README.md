@@ -20,6 +20,19 @@ node ./server.js
 ```
 This will run the server with default configuration. If you want to change settings, duplicate `config.dist.json` to `config.json` or edit the last one directly (see `./config/config.md` for details).
 
+## SSL/TLS and HTTPS
+The server defaults to `HTTP` when required TLS configuration is missing, but will try to run `HTTPS` if it can.
+To generate a self-signed certificate (easiest), run
+
+```shell
+mkdir tls
+openssl req -x509 -newkey rsa:4096 -keyout ./tls/key.pem -out ./tls/cert.pem -days 365
+```
+
+This will generate a self-sign certificate and store everything in the `./tls` directory. Now change `./config/config.json`'s TLS section to include those files (the `key.pem` is the `KEY` and the `cert.pem` is the `CRT`). Restart the server and you should be running `HTTPS`.
+
+> Note: As this is a self-signed certificate, most browsers will raise a warning. You can ignore that - you trust yourself, no?
+
 ## Credits
 Thanks to
 - Every node package author - check each package for respective licensing
