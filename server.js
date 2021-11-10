@@ -1,7 +1,7 @@
 /**
  * File: server.js
  * @author Theo Technicguy, Sorio
- * @version 0.4.6
+ * @version 0.4.7
  */
 
 // Imports and modules
@@ -85,7 +85,7 @@ app.get(["/favicon", "/favicon.ico"], (req, res) => {
  * @path / /index /index.html
  */
 app.get(["/", "/index", "/index.html"], async (req, res) => {
-    const user_param = utils.getUserParam(req);
+    const username = utils.getUsername(req);
 
     const results = await db.getAllIncidents();
     // Make data user friendly
@@ -108,7 +108,7 @@ app.get(["/", "/index", "/index.html"], async (req, res) => {
         this_result["date"] = new Date(this_result["creation_date"]).toLocaleDateString();
     }
 
-    res.render("index.html", {results, user_param});
+    res.render("index.html", {results, username});
 });
 
 /**
@@ -224,7 +224,8 @@ app.post("/register", upload.none(), async (req, res) => {
 app.get(["/report", "/new_incident"], (req, res) => {
     // Make sure users are logged in
     if (utils.userIsLogged(req)) {
-        res.render("new_incident.html", utils.getUserParam(req));
+        const username = utils.getUsername(req)
+        res.render("new_incident.html", {username});
     } else {
         res.redirect("/login");
     }
@@ -241,7 +242,7 @@ app.post("/insert", upload.single("image"), async (req, res) => {
         res.redirect('/login')
     }
 
-    const user_param = utils.getUserParam(req);
+    const username = utils.getUsername(req);
 
     // Check if user uploaded an image
     const image_path = utils.getFileName(req);
@@ -250,7 +251,7 @@ app.post("/insert", upload.single("image"), async (req, res) => {
     const data = {
         description: req.body.desc,
         address: req.body.adr,
-        author: user_param.user.name,
+        author: username,
         image: image_path
     };
 
@@ -268,7 +269,7 @@ app.post("/insert", upload.single("image"), async (req, res) => {
  */
 app.get("/show_incident", async (req, res) => {
     // Get current user
-    const user_param = utils.getUserParam(req);
+    const username = utils.getUsername(req);
 
     // Get requested ID and incident
     const id = req.query.id;
@@ -276,13 +277,13 @@ app.get("/show_incident", async (req, res) => {
 
     // Check if the user is the author
     let author;let admin;
-    if (user_param.user != null) {
-        author = user_param.user.name === incident.author;
+    if (username != null) {
+        author = username === incident.author;
     } else {
         author = false;
     }
-    if (user_param.user != null) {
-        if(user_param.user.name === "admin"){
+    if (username != null) {
+        if(username === "admin"){
             admin =true;author=true;
         }
     } else {
@@ -290,7 +291,7 @@ app.get("/show_incident", async (req, res) => {
     }
 
     // Render the page
-    res.render("show_incident.html", {incident, user_param, author,admin});
+    res.render("show_incident.html", {incident, username, author,admin});
 });
 
 /**
@@ -305,7 +306,7 @@ app.post("/update", upload.single("image"), async (req, res) => {
     }
 
     // Get user
-    const user_param = utils.getUserParam(req);
+    const username = utils.getUsername(req);
 
     // Get requested ID and incident
     const id = req.query.id;
@@ -313,13 +314,13 @@ app.post("/update", upload.single("image"), async (req, res) => {
 
     // Check if the user is the author
     let author;let admin;
-    if (user_param.user != null) {
-        author = user_param.user.name === incident.author;
+    if (username != null) {
+        author = username === incident.author;
     } else {
         author = false;
     }
-    if (user_param.user != null) {
-        if(user_param.user.name === "admin"){
+    if (username != null) {
+        if(username === "admin"){
             admin =true;author=true;
         }
     } else {
@@ -371,7 +372,7 @@ app.get("/delete", async (req, res) => {
     }
 
     // Get user
-    const user_param = utils.getUserParam(req);
+    const username = utils.getUsername(req);
 
     // Get requested ID and incident
     const id = req.query.id;
@@ -379,20 +380,20 @@ app.get("/delete", async (req, res) => {
 
     // Check if the user is the author
     let author;let admin;
-    if (user_param.user != null) {
-        author = user_param.user.name === incident.author;
+    if (username != null) {
+        author = username === incident.author;
     } else {
         author = false;
     }
-    
-    if (user_param.user != null) {
-        if(user_param.user.name === "admin"){
+
+    if (username != null) {
+        if(username === "admin"){
             admin =true;author=true;
         }
     } else {
         admin = false;
     }
-    
+
     if (!author) {
         res.status(403).end();
     }
@@ -408,7 +409,7 @@ app.get("/delete", async (req, res) => {
  * @path /search
  */
 app.post("/search", upload.none(), async (req,res)=>{
-    const user_param = utils.getUserParam(req);
+    const username = utils.getUsername(req);
 
     const search = req.body.searched;
     console.log(search);
@@ -417,7 +418,7 @@ app.post("/search", upload.none(), async (req,res)=>{
     console.log(results);
 
     if (results.length === 0) {
-        res.render("index.html", {"errors": [{"error": "Aucune correspondance trouvée"}], user_param});
+        res.render("index.html", {"errors": [{"error": "Aucune correspondance trouvée"}], username});
         return;
     }
     else{
@@ -429,16 +430,16 @@ app.post("/search", upload.none(), async (req,res)=>{
                 case "Done": results[i]["status"] = "Fini"; break;
                 default: results[i]["status"] = "Enregistré";
             }
-    
+
             // Trim description
             results[i]["description"] = results[i]["description"].substr(0, 50);
-    
+
             // Set date
             results[i]["date"] = new Date(results[i]["creation_date"]).toLocaleDateString();
         }
     }
 
-    res.render("index.html", {results, user_param});
+    res.render("index.html", {results, username});
 });
 
 

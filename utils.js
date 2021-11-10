@@ -1,7 +1,7 @@
 /**
  * File: utils.js
  * @author Theo Technicguy, Sorio
- * @version 0.0.4
+ * @version 0.0.5
  *
  * This file includes general utility functions
  */
@@ -29,13 +29,13 @@ class utils {
     /**
      * Return current username based on the session cookie
      * @param req
-     * @returns {{}|{user: {name}}}
+     * @returns {null|string}
      */
-    getUserParam(req) {
+    getUsername(req) {
         if (this.userIsLogged(req)) {
-            return {"user": {"name": req.session.username}};
+            return req.session.username;
         } else {
-            return {};
+            return null;
         }
     }
 
