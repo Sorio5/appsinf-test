@@ -45,10 +45,10 @@
                     </div>
 
                     <div class="navbar-item has-text-centered pr-5">
-                        {{#user_param.user}}
+                        {{#username}}
                         <div class="navbar-item has-dropdown" id="nav-links1">
                             <a class="navbar-link is-arrowless" data-target="nav-links1" id="userPseudo">
-                                Bonjour<br/>{{name}}
+                                Bonjour<br/>{{username}}
                             </a>
                             <div class="navbar-dropdown is-boxed is-right" >
                               <a class="navbar-item"  href="/logout">
@@ -57,10 +57,10 @@
                             </div>
                         </div>
 
-                        {{/user_param.user}}
-                        {{^user_param.user}}
+                        {{/username}}
+                        {{^username}}
                             <a class="navbar-item" href="/login">Se connecter</a>
-                        {{/user_param.user}}
+                        {{/username}}
                     </div>
 
                 </div>

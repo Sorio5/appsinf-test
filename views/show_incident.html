@@ -35,20 +35,20 @@
                         <form action="/search" method="post" id="search"></form>
                         <div class="field has-addons">
                             <p class="control">
-                                    <input class="input" placeholder="Rechercher" type="text" name="searched" form="search">   
+                                    <input class="input" placeholder="Rechercher" type="text" name="searched" form="search">
                             </p>
                             <p class="control">
-                                
+
                                 <button class="button" form="search"><i class="fa fa-search" aria-hidden="true"></i></button>
                             </p>
                         </div>
                     </div>
 
                     <div class="navbar-item has-text-centered pr-5">
-                        {{#user_param.user}}
+                        {{#username}}
                         <div class="navbar-item has-dropdown" id="nav-links1">
                             <a class="navbar-link is-arrowless" data-target="nav-links1" id="userPseudo">
-                                Bonjour<br/>{{name}}    
+                                Bonjour<br/>{{username}}
                             </a>
                             <div class="navbar-dropdown is-boxed is-right" >
                               <a class="navbar-item"  href="/logout">
@@ -56,10 +56,11 @@
                               </a>
                             </div>
                         </div>
-                        {{/user_param.user}}
-                        {{^user_param.user}}
+
+                        {{/username}}
+                        {{^username}}
                             <a class="navbar-item" href="/login">Se connecter</a>
-                        {{/user_param.user}}
+                        {{/username}}
                     </div>
 
                 </div>
@@ -81,7 +82,7 @@
         </nav>
 
         <main class="section">
-            
+
             <form action="/update?id={{incident._id}}" class="column" method="post" id="update">
                 {{#admin}}
                 <div class="field">
